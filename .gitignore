@@ -1,0 +1,10 @@
+# Banco bruto: fica fora do repositório (no CI vira artefato da execução)
+radar.db
+*.db
+data/raw/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/

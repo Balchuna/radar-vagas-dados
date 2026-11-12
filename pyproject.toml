@@ -1,0 +1,13 @@
+[project]
+name = "radar-vagas-dados"
+version = "0.1.0"
+description = "Radar de vagas de Dados e TI no Brasil, coletadas por APIs públicas de recrutamento"
+requires-python = ">=3.11"
+dependencies = ["requests>=2.31", "PyYAML>=6.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

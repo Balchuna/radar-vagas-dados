@@ -1,0 +1,42 @@
+# Empresas acompanhadas, por fonte.
+# Critério de entrada: o quadro de vagas respondeu na API pública da fonte e tinha
+# pelo menos uma vaga com local no Brasil ou na América Latina na sondagem de 12/11/2026.
+# Não é uma amostra do mercado: veja "Limitações" no README.
+# slug = identificador da empresa na URL da fonte; nome = como aparece nos relatórios.
+
+greenhouse:
+  - {slug: btgpactual, nome: BTG Pactual}
+  - {slug: stone, nome: Stone}
+  - {slug: c6bank, nome: C6 Bank}
+  - {slug: inter, nome: Inter}
+  - {slug: xpinc, nome: XP Inc.}
+  - {slug: quintoandar, nome: QuintoAndar}
+  - {slug: gympass, nome: Wellhub (Gympass)}
+  - {slug: powerdigitalmarketing, nome: Power Digital Marketing}
+  - {slug: arcoeducacao, nome: Arco Educação}
+  - {slug: ebanx, nome: EBANX}
+  - {slug: vtex, nome: VTEX}
+  - {slug: brex, nome: Brex}
+  - {slug: wildlifestudios, nome: Wildlife Studios}
+  - {slug: getnet, nome: Getnet}
+  - {slug: datadog, nome: Datadog}
+  - {slug: jusbrasil, nome: Jusbrasil}
+  - {slug: rdstation, nome: RD Station}
+  - {slug: mongodb, nome: MongoDB}
+  - {slug: turing, nome: Turing}
+  - {slug: gitlab, nome: GitLab}
+  - {slug: elastic, nome: Elastic}
+  - {slug: thoughtworks, nome: Thoughtworks}
+
+lever:
+  - {slug: ciandt, nome: CI&T}
+  - {slug: tryjeeves, nome: Jeeves}
+  - {slug: swile, nome: Swile}
+  - {slug: superside, nome: Superside}
+  - {slug: neon, nome: Neon}
+  - {slug: kavak, nome: Kavak}
+
+ashby:
+  - {slug: elevenlabs, nome: ElevenLabs}
+  - {slug: belvo, nome: Belvo}
+  - {slug: zapier, nome: Zapier}

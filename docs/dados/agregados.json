@@ -1,0 +1,1205 @@
+{
+ "panorama": [
+  {
+   "ultima_coleta": "2026-11-12T19:31:29+00:00",
+   "primeira_coleta": "2026-11-12T18:55:44+00:00",
+   "execucoes": 7,
+   "dias_com_coleta": 1,
+   "empresas_consultadas": 31,
+   "empresas_ok": 31,
+   "empresas_com_vaga": 30,
+   "vagas_ativas": 1505,
+   "vagas_ti": 341,
+   "vagas_dados": 95,
+   "vagas_dados_acessiveis": 34,
+   "vagas_dados_junior_estagio": 1,
+   "vagas_dados_ti_junior_estagio": 14,
+   "publicacao_mais_antiga": "2022-01-12",
+   "publicacao_mais_recente": "2026-11-12",
+   "versao_dicionario_skills": 2
+  }
+ ],
+ "area_por_nivel": [
+  {
+   "area": "dados",
+   "estagio": 1,
+   "junior": 0,
+   "pleno": 10,
+   "senior": 47,
+   "lideranca": 4,
+   "nao_informada": 33,
+   "total": 95
+  },
+  {
+   "area": "ti",
+   "estagio": 5,
+   "junior": 8,
+   "pleno": 21,
+   "senior": 184,
+   "lideranca": 33,
+   "nao_informada": 90,
+   "total": 341
+  },
+  {
+   "area": "outras",
+   "estagio": 20,
+   "junior": 42,
+   "pleno": 40,
+   "senior": 215,
+   "lideranca": 116,
+   "nao_informada": 636,
+   "total": 1069
+  }
+ ],
+ "top_skills_dados": [
+  {
+   "skill": "Python",
+   "categoria": "linguagem",
+   "vagas": 75,
+   "pct": 78.9
+  },
+  {
+   "skill": "SQL",
+   "categoria": "linguagem",
+   "vagas": 73,
+   "pct": 76.8
+  },
+  {
+   "skill": "ETL/pipelines de dados",
+   "categoria": "engenharia_dados",
+   "vagas": 44,
+   "pct": 46.3
+  },
+  {
+   "skill": "AWS",
+   "categoria": "nuvem",
+   "vagas": 33,
+   "pct": 34.7
+  },
+  {
+   "skill": "Airflow",
+   "categoria": "engenharia_dados",
+   "vagas": 31,
+   "pct": 32.6
+  },
+  {
+   "skill": "Databricks",
+   "categoria": "banco",
+   "vagas": 30,
+   "pct": 31.6
+  },
+  {
+   "skill": "Estatística",
+   "categoria": "analise",
+   "vagas": 28,
+   "pct": 29.5
+  },
+  {
+   "skill": "Inglês",
+   "categoria": "idioma",
+   "vagas": 27,
+   "pct": 28.4
+  },
+  {
+   "skill": "Machine Learning",
+   "categoria": "ia",
+   "vagas": 27,
+   "pct": 28.4
+  },
+  {
+   "skill": "Spark",
+   "categoria": "engenharia_dados",
+   "vagas": 27,
+   "pct": 28.4
+  },
+  {
+   "skill": "CI/CD",
+   "categoria": "infra",
+   "vagas": 26,
+   "pct": 27.4
+  },
+  {
+   "skill": "Git",
+   "categoria": "infra",
+   "vagas": 26,
+   "pct": 27.4
+  },
+  {
+   "skill": "Data Warehouse/Lake",
+   "categoria": "engenharia_dados",
+   "vagas": 25,
+   "pct": 26.3
+  },
+  {
+   "skill": "IA generativa / LLM",
+   "categoria": "ia",
+   "vagas": 25,
+   "pct": 26.3
+  },
+  {
+   "skill": "Modelagem de dados",
+   "categoria": "engenharia_dados",
+   "vagas": 24,
+   "pct": 25.3
+  },
+  {
+   "skill": "Power BI",
+   "categoria": "bi",
+   "vagas": 20,
+   "pct": 21.1
+  },
+  {
+   "skill": "dbt",
+   "categoria": "engenharia_dados",
+   "vagas": 18,
+   "pct": 18.9
+  },
+  {
+   "skill": "Azure",
+   "categoria": "nuvem",
+   "vagas": 17,
+   "pct": 17.9
+  },
+  {
+   "skill": "Terraform/IaC",
+   "categoria": "infra",
+   "vagas": 17,
+   "pct": 17.9
+  },
+  {
+   "skill": "GCP",
+   "categoria": "nuvem",
+   "vagas": 16,
+   "pct": 16.8
+  }
+ ],
+ "top_skills_dados_acessiveis": [
+  {
+   "skill": "SQL",
+   "categoria": "linguagem",
+   "vagas": 23,
+   "pct": 67.6
+  },
+  {
+   "skill": "Python",
+   "categoria": "linguagem",
+   "vagas": 22,
+   "pct": 64.7
+  },
+  {
+   "skill": "ETL/pipelines de dados",
+   "categoria": "engenharia_dados",
+   "vagas": 15,
+   "pct": 44.1
+  },
+  {
+   "skill": "Estatística",
+   "categoria": "analise",
+   "vagas": 14,
+   "pct": 41.2
+  },
+  {
+   "skill": "AWS",
+   "categoria": "nuvem",
+   "vagas": 12,
+   "pct": 35.3
+  },
+  {
+   "skill": "Inglês",
+   "categoria": "idioma",
+   "vagas": 10,
+   "pct": 29.4
+  },
+  {
+   "skill": "Power BI",
+   "categoria": "bi",
+   "vagas": 10,
+   "pct": 29.4
+  },
+  {
+   "skill": "Databricks",
+   "categoria": "banco",
+   "vagas": 9,
+   "pct": 26.5
+  },
+  {
+   "skill": "Looker",
+   "categoria": "bi",
+   "vagas": 9,
+   "pct": 26.5
+  },
+  {
+   "skill": "Excel/planilhas",
+   "categoria": "bi",
+   "vagas": 8,
+   "pct": 23.5
+  },
+  {
+   "skill": "Git",
+   "categoria": "infra",
+   "vagas": 8,
+   "pct": 23.5
+  },
+  {
+   "skill": "Tableau",
+   "categoria": "bi",
+   "vagas": 8,
+   "pct": 23.5
+  },
+  {
+   "skill": "Airflow",
+   "categoria": "engenharia_dados",
+   "vagas": 7,
+   "pct": 20.6
+  },
+  {
+   "skill": "Data Warehouse/Lake",
+   "categoria": "engenharia_dados",
+   "vagas": 7,
+   "pct": 20.6
+  },
+  {
+   "skill": "IA generativa / LLM",
+   "categoria": "ia",
+   "vagas": 7,
+   "pct": 20.6
+  }
+ ],
+ "skills_por_nivel_dados": [
+  {
+   "skill": "Estatística",
+   "vagas_dados": 28,
+   "vagas_acessiveis": 14,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 41.2,
+   "vagas_pleno_ou_acima": 14,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 23.0,
+   "diferenca_pp": 18.2,
+   "margem_95_pp": 19.6,
+   "diferenca_clara": false
+  },
+  {
+   "skill": "Looker",
+   "vagas_dados": 15,
+   "vagas_acessiveis": 9,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 26.5,
+   "vagas_pleno_ou_acima": 6,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 9.8,
+   "diferenca_pp": 16.6,
+   "margem_95_pp": 16.6,
+   "diferenca_clara": false
+  },
+  {
+   "skill": "Excel/planilhas",
+   "vagas_dados": 14,
+   "vagas_acessiveis": 8,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 23.5,
+   "vagas_pleno_ou_acima": 6,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 9.8,
+   "diferenca_pp": 13.7,
+   "margem_95_pp": 16.1,
+   "diferenca_clara": false
+  },
+  {
+   "skill": "Power BI",
+   "vagas_dados": 20,
+   "vagas_acessiveis": 10,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 29.4,
+   "vagas_pleno_ou_acima": 10,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 16.4,
+   "diferenca_pp": 13.0,
+   "margem_95_pp": 17.9,
+   "diferenca_clara": false
+  },
+  {
+   "skill": "Tableau",
+   "vagas_dados": 16,
+   "vagas_acessiveis": 8,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 23.5,
+   "vagas_pleno_ou_acima": 8,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 13.1,
+   "diferenca_pp": 10.4,
+   "margem_95_pp": 16.6,
+   "diferenca_clara": false
+  },
+  {
+   "skill": "Snowflake",
+   "vagas_dados": 13,
+   "vagas_acessiveis": 5,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 14.7,
+   "vagas_pleno_ou_acima": 8,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 13.1,
+   "diferenca_pp": 1.6,
+   "margem_95_pp": 14.6,
+   "diferenca_clara": false
+  },
+  {
+   "skill": "Inglês",
+   "vagas_dados": 27,
+   "vagas_acessiveis": 10,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 29.4,
+   "vagas_pleno_ou_acima": 17,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 27.9,
+   "diferenca_pp": 1.5,
+   "margem_95_pp": 19.0,
+   "diferenca_clara": false
+  },
+  {
+   "skill": "AWS",
+   "vagas_dados": 33,
+   "vagas_acessiveis": 12,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 35.3,
+   "vagas_pleno_ou_acima": 21,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 34.4,
+   "diferenca_pp": 0.9,
+   "margem_95_pp": 20.0,
+   "diferenca_clara": false
+  },
+  {
+   "skill": "dbt",
+   "vagas_dados": 18,
+   "vagas_acessiveis": 6,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 17.6,
+   "vagas_pleno_ou_acima": 12,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 19.7,
+   "diferenca_pp": -2.0,
+   "margem_95_pp": 16.2,
+   "diferenca_clara": false
+  },
+  {
+   "skill": "ETL/pipelines de dados",
+   "vagas_dados": 44,
+   "vagas_acessiveis": 15,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 44.1,
+   "vagas_pleno_ou_acima": 29,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 47.5,
+   "diferenca_pp": -3.4,
+   "margem_95_pp": 20.9,
+   "diferenca_clara": false
+  },
+  {
+   "skill": "Git",
+   "vagas_dados": 26,
+   "vagas_acessiveis": 8,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 23.5,
+   "vagas_pleno_ou_acima": 18,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 29.5,
+   "diferenca_pp": -6.0,
+   "margem_95_pp": 18.3,
+   "diferenca_clara": false
+  },
+  {
+   "skill": "Modelagem de dados",
+   "vagas_dados": 24,
+   "vagas_acessiveis": 7,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 20.6,
+   "vagas_pleno_ou_acima": 17,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 27.9,
+   "diferenca_pp": -7.3,
+   "margem_95_pp": 17.6,
+   "diferenca_clara": false
+  },
+  {
+   "skill": "GCP",
+   "vagas_dados": 16,
+   "vagas_acessiveis": 4,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 11.8,
+   "vagas_pleno_ou_acima": 12,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 19.7,
+   "diferenca_pp": -7.9,
+   "margem_95_pp": 14.7,
+   "diferenca_clara": false
+  },
+  {
+   "skill": "Databricks",
+   "vagas_dados": 30,
+   "vagas_acessiveis": 9,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 26.5,
+   "vagas_pleno_ou_acima": 21,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 34.4,
+   "diferenca_pp": -8.0,
+   "margem_95_pp": 19.0,
+   "diferenca_clara": false
+  },
+  {
+   "skill": "BigQuery",
+   "vagas_dados": 11,
+   "vagas_acessiveis": 2,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 5.9,
+   "vagas_pleno_ou_acima": 9,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 14.8,
+   "diferenca_pp": -8.9,
+   "margem_95_pp": 11.9,
+   "diferenca_clara": false
+  },
+  {
+   "skill": "Data Warehouse/Lake",
+   "vagas_dados": 25,
+   "vagas_acessiveis": 7,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 20.6,
+   "vagas_pleno_ou_acima": 18,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 29.5,
+   "diferenca_pp": -8.9,
+   "margem_95_pp": 17.8,
+   "diferenca_clara": false
+  },
+  {
+   "skill": "IA generativa / LLM",
+   "vagas_dados": 25,
+   "vagas_acessiveis": 7,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 20.6,
+   "vagas_pleno_ou_acima": 18,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 29.5,
+   "diferenca_pp": -8.9,
+   "margem_95_pp": 17.8,
+   "diferenca_clara": false
+  },
+  {
+   "skill": "Machine Learning",
+   "vagas_dados": 27,
+   "vagas_acessiveis": 7,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 20.6,
+   "vagas_pleno_ou_acima": 20,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 32.8,
+   "diferenca_pp": -12.2,
+   "margem_95_pp": 18.0,
+   "diferenca_clara": false
+  },
+  {
+   "skill": "Azure",
+   "vagas_dados": 17,
+   "vagas_acessiveis": 3,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 8.8,
+   "vagas_pleno_ou_acima": 14,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 23.0,
+   "diferenca_pp": -14.1,
+   "margem_95_pp": 14.2,
+   "diferenca_clara": false
+  },
+  {
+   "skill": "SQL",
+   "vagas_dados": 73,
+   "vagas_acessiveis": 23,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 67.6,
+   "vagas_pleno_ou_acima": 50,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 82.0,
+   "diferenca_pp": -14.3,
+   "margem_95_pp": 18.5,
+   "diferenca_clara": false
+  },
+  {
+   "skill": "Terraform/IaC",
+   "vagas_dados": 17,
+   "vagas_acessiveis": 2,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 5.9,
+   "vagas_pleno_ou_acima": 15,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 24.6,
+   "diferenca_pp": -18.7,
+   "margem_95_pp": 13.4,
+   "diferenca_clara": true
+  },
+  {
+   "skill": "Airflow",
+   "vagas_dados": 31,
+   "vagas_acessiveis": 7,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 20.6,
+   "vagas_pleno_ou_acima": 24,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 39.3,
+   "diferenca_pp": -18.8,
+   "margem_95_pp": 18.3,
+   "diferenca_clara": true
+  },
+  {
+   "skill": "Spark",
+   "vagas_dados": 27,
+   "vagas_acessiveis": 5,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 14.7,
+   "vagas_pleno_ou_acima": 22,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 36.1,
+   "diferenca_pp": -21.4,
+   "margem_95_pp": 16.9,
+   "diferenca_clara": true
+  },
+  {
+   "skill": "Python",
+   "vagas_dados": 75,
+   "vagas_acessiveis": 22,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 64.7,
+   "vagas_pleno_ou_acima": 53,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 86.9,
+   "diferenca_pp": -22.2,
+   "margem_95_pp": 18.2,
+   "diferenca_clara": true
+  },
+  {
+   "skill": "CI/CD",
+   "vagas_dados": 26,
+   "vagas_acessiveis": 4,
+   "total_acessiveis": 34,
+   "pct_acessiveis": 11.8,
+   "vagas_pleno_ou_acima": 22,
+   "total_pleno_ou_acima": 61,
+   "pct_pleno_ou_acima": 36.1,
+   "diferenca_pp": -24.3,
+   "margem_95_pp": 16.2,
+   "diferenca_clara": true
+  }
+ ],
+ "categorias_dados": [
+  {
+   "categoria": "linguagem",
+   "vagas": 85,
+   "pct": 89.5
+  },
+  {
+   "categoria": "engenharia_dados",
+   "vagas": 59,
+   "pct": 62.1
+  },
+  {
+   "categoria": "nuvem",
+   "vagas": 47,
+   "pct": 49.5
+  },
+  {
+   "categoria": "banco",
+   "vagas": 45,
+   "pct": 47.4
+  },
+  {
+   "categoria": "infra",
+   "vagas": 42,
+   "pct": 44.2
+  },
+  {
+   "categoria": "ia",
+   "vagas": 39,
+   "pct": 41.1
+  },
+  {
+   "categoria": "bi",
+   "vagas": 35,
+   "pct": 36.8
+  },
+  {
+   "categoria": "analise",
+   "vagas": 31,
+   "pct": 32.6
+  },
+  {
+   "categoria": "idioma",
+   "vagas": 27,
+   "pct": 28.4
+  },
+  {
+   "categoria": "gestao",
+   "vagas": 10,
+   "pct": 10.5
+  },
+  {
+   "categoria": "integracao",
+   "vagas": 4,
+   "pct": 4.2
+  },
+  {
+   "categoria": "automacao",
+   "vagas": 1,
+   "pct": 1.1
+  }
+ ],
+ "pares_skills_dados": [
+  {
+   "skill_1": "Python",
+   "skill_2": "SQL",
+   "vagas": 63,
+   "pct": 66.3
+  },
+  {
+   "skill_1": "ETL/pipelines de dados",
+   "skill_2": "SQL",
+   "vagas": 41,
+   "pct": 43.2
+  },
+  {
+   "skill_1": "ETL/pipelines de dados",
+   "skill_2": "Python",
+   "vagas": 40,
+   "pct": 42.1
+  },
+  {
+   "skill_1": "Airflow",
+   "skill_2": "SQL",
+   "vagas": 30,
+   "pct": 31.6
+  },
+  {
+   "skill_1": "AWS",
+   "skill_2": "Python",
+   "vagas": 29,
+   "pct": 30.5
+  },
+  {
+   "skill_1": "Airflow",
+   "skill_2": "Python",
+   "vagas": 29,
+   "pct": 30.5
+  },
+  {
+   "skill_1": "Databricks",
+   "skill_2": "SQL",
+   "vagas": 28,
+   "pct": 29.5
+  },
+  {
+   "skill_1": "AWS",
+   "skill_2": "SQL",
+   "vagas": 27,
+   "pct": 28.4
+  },
+  {
+   "skill_1": "Python",
+   "skill_2": "Spark",
+   "vagas": 27,
+   "pct": 28.4
+  },
+  {
+   "skill_1": "Databricks",
+   "skill_2": "Python",
+   "vagas": 26,
+   "pct": 27.4
+  },
+  {
+   "skill_1": "SQL",
+   "skill_2": "Spark",
+   "vagas": 26,
+   "pct": 27.4
+  },
+  {
+   "skill_1": "Machine Learning",
+   "skill_2": "Python",
+   "vagas": 25,
+   "pct": 26.3
+  },
+  {
+   "skill_1": "AWS",
+   "skill_2": "ETL/pipelines de dados",
+   "vagas": 24,
+   "pct": 25.3
+  },
+  {
+   "skill_1": "Data Warehouse/Lake",
+   "skill_2": "SQL",
+   "vagas": 24,
+   "pct": 25.3
+  },
+  {
+   "skill_1": "Databricks",
+   "skill_2": "ETL/pipelines de dados",
+   "vagas": 24,
+   "pct": 25.3
+  }
+ ],
+ "modalidade": [
+  {
+   "recorte": "dados",
+   "modalidade": "remoto",
+   "vagas": 50,
+   "pct_do_recorte": 52.6,
+   "pct_das_informadas": 79.4
+  },
+  {
+   "recorte": "dados",
+   "modalidade": "hibrido",
+   "vagas": 8,
+   "pct_do_recorte": 8.4,
+   "pct_das_informadas": 12.7
+  },
+  {
+   "recorte": "dados",
+   "modalidade": "presencial",
+   "vagas": 5,
+   "pct_do_recorte": 5.3,
+   "pct_das_informadas": 7.9
+  },
+  {
+   "recorte": "dados",
+   "modalidade": "nao_informada",
+   "vagas": 32,
+   "pct_do_recorte": 33.7,
+   "pct_das_informadas": null
+  },
+  {
+   "recorte": "dados_e_ti",
+   "modalidade": "remoto",
+   "vagas": 181,
+   "pct_do_recorte": 41.5,
+   "pct_das_informadas": 64.2
+  },
+  {
+   "recorte": "dados_e_ti",
+   "modalidade": "hibrido",
+   "vagas": 49,
+   "pct_do_recorte": 11.2,
+   "pct_das_informadas": 17.4
+  },
+  {
+   "recorte": "dados_e_ti",
+   "modalidade": "presencial",
+   "vagas": 52,
+   "pct_do_recorte": 11.9,
+   "pct_das_informadas": 18.4
+  },
+  {
+   "recorte": "dados_e_ti",
+   "modalidade": "nao_informada",
+   "vagas": 154,
+   "pct_do_recorte": 35.3,
+   "pct_das_informadas": null
+  },
+  {
+   "recorte": "todas",
+   "modalidade": "remoto",
+   "vagas": 394,
+   "pct_do_recorte": 26.2,
+   "pct_das_informadas": 36.8
+  },
+  {
+   "recorte": "todas",
+   "modalidade": "hibrido",
+   "vagas": 152,
+   "pct_do_recorte": 10.1,
+   "pct_das_informadas": 14.2
+  },
+  {
+   "recorte": "todas",
+   "modalidade": "presencial",
+   "vagas": 526,
+   "pct_do_recorte": 35.0,
+   "pct_das_informadas": 49.1
+  },
+  {
+   "recorte": "todas",
+   "modalidade": "nao_informada",
+   "vagas": 433,
+   "pct_do_recorte": 28.8,
+   "pct_das_informadas": null
+  }
+ ],
+ "ferramentas_bi": [
+  {
+   "skill": "Power BI",
+   "vagas": 20,
+   "pct": 21.1,
+   "vagas_acessiveis": 10
+  },
+  {
+   "skill": "Tableau",
+   "vagas": 16,
+   "pct": 16.8,
+   "vagas_acessiveis": 8
+  },
+  {
+   "skill": "Looker",
+   "vagas": 15,
+   "pct": 15.8,
+   "vagas_acessiveis": 9
+  },
+  {
+   "skill": "Excel/planilhas",
+   "vagas": 14,
+   "pct": 14.7,
+   "vagas_acessiveis": 8
+  },
+  {
+   "skill": "Metabase",
+   "vagas": 2,
+   "pct": 2.1,
+   "vagas_acessiveis": 0
+  },
+  {
+   "skill": "Qlik",
+   "vagas": 1,
+   "pct": 1.1,
+   "vagas_acessiveis": 1
+  }
+ ],
+ "bi_combinacoes": [
+  {
+   "combinacao": "só Power BI",
+   "vagas": 10,
+   "pct": 10.5
+  },
+  {
+   "combinacao": "só Looker",
+   "vagas": 2,
+   "pct": 2.1
+  },
+  {
+   "combinacao": "só Tableau",
+   "vagas": 3,
+   "pct": 3.2
+  },
+  {
+   "combinacao": "duas ou mais",
+   "vagas": 14,
+   "pct": 14.7
+  },
+  {
+   "combinacao": "nenhuma das três",
+   "vagas": 66,
+   "pct": 69.5
+  }
+ ],
+ "evolucao_semanal": [
+  {
+   "semana": "2026-11-09",
+   "dados_vistas": 98,
+   "dados_novas": 98,
+   "dados_encerradas": 3,
+   "todas_vistas": 1508,
+   "todas_novas": 1508,
+   "todas_encerradas": 3
+  }
+ ],
+ "idade_vagas_dados": [
+  {
+   "faixa": "até 7 dias",
+   "vagas": 9,
+   "pct": 9.5
+  },
+  {
+   "faixa": "8 a 30 dias",
+   "vagas": 25,
+   "pct": 26.3
+  },
+  {
+   "faixa": "31 a 90 dias",
+   "vagas": 33,
+   "pct": 34.7
+  },
+  {
+   "faixa": "mais de 90 dias",
+   "vagas": 28,
+   "pct": 29.5
+  }
+ ],
+ "empresas_dados": [
+  {
+   "empresa": "CI&T",
+   "fonte": "lever",
+   "vagas_dados": 23,
+   "dados_acessiveis": 6,
+   "vagas_ti": 63,
+   "vagas_total": 96
+  },
+  {
+   "empresa": "BTG Pactual",
+   "fonte": "greenhouse",
+   "vagas_dados": 11,
+   "dados_acessiveis": 8,
+   "vagas_ti": 98,
+   "vagas_total": 232
+  },
+  {
+   "empresa": "Inter",
+   "fonte": "greenhouse",
+   "vagas_dados": 9,
+   "dados_acessiveis": 0,
+   "vagas_ti": 49,
+   "vagas_total": 108
+  },
+  {
+   "empresa": "QuintoAndar",
+   "fonte": "greenhouse",
+   "vagas_dados": 9,
+   "dados_acessiveis": 0,
+   "vagas_ti": 15,
+   "vagas_total": 77
+  },
+  {
+   "empresa": "Brex",
+   "fonte": "greenhouse",
+   "vagas_dados": 6,
+   "dados_acessiveis": 2,
+   "vagas_ti": 20,
+   "vagas_total": 80
+  },
+  {
+   "empresa": "C6 Bank",
+   "fonte": "greenhouse",
+   "vagas_dados": 6,
+   "dados_acessiveis": 1,
+   "vagas_ti": 20,
+   "vagas_total": 153
+  },
+  {
+   "empresa": "Power Digital Marketing",
+   "fonte": "greenhouse",
+   "vagas_dados": 5,
+   "dados_acessiveis": 5,
+   "vagas_ti": 1,
+   "vagas_total": 90
+  },
+  {
+   "empresa": "XP Inc.",
+   "fonte": "greenhouse",
+   "vagas_dados": 5,
+   "dados_acessiveis": 3,
+   "vagas_ti": 8,
+   "vagas_total": 101
+  },
+  {
+   "empresa": "Wildlife Studios",
+   "fonte": "greenhouse",
+   "vagas_dados": 4,
+   "dados_acessiveis": 3,
+   "vagas_ti": 2,
+   "vagas_total": 15
+  },
+  {
+   "empresa": "Wellhub (Gympass)",
+   "fonte": "greenhouse",
+   "vagas_dados": 3,
+   "dados_acessiveis": 1,
+   "vagas_ti": 13,
+   "vagas_total": 38
+  },
+  {
+   "empresa": "EBANX",
+   "fonte": "greenhouse",
+   "vagas_dados": 2,
+   "dados_acessiveis": 0,
+   "vagas_ti": 6,
+   "vagas_total": 20
+  },
+  {
+   "empresa": "Jusbrasil",
+   "fonte": "greenhouse",
+   "vagas_dados": 2,
+   "dados_acessiveis": 0,
+   "vagas_ti": 0,
+   "vagas_total": 7
+  },
+  {
+   "empresa": "Stone",
+   "fonte": "greenhouse",
+   "vagas_dados": 2,
+   "dados_acessiveis": 0,
+   "vagas_ti": 3,
+   "vagas_total": 326
+  },
+  {
+   "empresa": "Turing",
+   "fonte": "greenhouse",
+   "vagas_dados": 2,
+   "dados_acessiveis": 2,
+   "vagas_ti": 2,
+   "vagas_total": 6
+  },
+  {
+   "empresa": "VTEX",
+   "fonte": "greenhouse",
+   "vagas_dados": 2,
+   "dados_acessiveis": 2,
+   "vagas_ti": 9,
+   "vagas_total": 17
+  }
+ ],
+ "vagas_entrada": [
+  {
+   "area": "dados",
+   "senioridade": "estagio",
+   "empresa": "VTEX",
+   "titulo": "Estágio em Ciência de Dados",
+   "modalidade": "nao_informada",
+   "publicada_em": "2026-11-06",
+   "url": "https://job-boards.greenhouse.io/vtex/jobs/6241809004"
+  },
+  {
+   "area": "ti",
+   "senioridade": "estagio",
+   "empresa": "BTG Pactual",
+   "titulo": "Estágio Short Job | Automation - Development",
+   "modalidade": "remoto",
+   "publicada_em": "2026-08-03",
+   "url": "https://carreiras.btgpactual.com/vagas?gh_jid=6133390004"
+  },
+  {
+   "area": "ti",
+   "senioridade": "estagio",
+   "empresa": "BTG Pactual",
+   "titulo": "Estágio Short Job | Automation - Development (1 semestre de 2027)",
+   "modalidade": "nao_informada",
+   "publicada_em": "2026-09-10",
+   "url": "https://carreiras.btgpactual.com/vagas?gh_jid=6188507004"
+  },
+  {
+   "area": "ti",
+   "senioridade": "estagio",
+   "empresa": "BTG Pactual",
+   "titulo": "Estágio Short Job | Automation - Discovery",
+   "modalidade": "hibrido",
+   "publicada_em": "2026-08-03",
+   "url": "https://carreiras.btgpactual.com/vagas?gh_jid=6133602004"
+  },
+  {
+   "area": "ti",
+   "senioridade": "estagio",
+   "empresa": "BTG Pactual",
+   "titulo": "Estágio Short Job | Automation - Discovery (1 semestre de 2027)",
+   "modalidade": "presencial",
+   "publicada_em": "2026-09-10",
+   "url": "https://carreiras.btgpactual.com/vagas?gh_jid=6188501004"
+  },
+  {
+   "area": "ti",
+   "senioridade": "estagio",
+   "empresa": "Brex",
+   "titulo": "Software Engineer, Internship - 2027",
+   "modalidade": "nao_informada",
+   "publicada_em": "2026-11-09",
+   "url": "https://www.brex.com/careers/8935242002?gh_jid=8935242002"
+  },
+  {
+   "area": "ti",
+   "senioridade": "junior",
+   "empresa": "BTG Pactual",
+   "titulo": "Engenheiro de Software Junior (Java) | Digital Equities",
+   "modalidade": "remoto",
+   "publicada_em": "2026-08-13",
+   "url": "https://carreiras.btgpactual.com/vagas?gh_jid=6143439004"
+  },
+  {
+   "area": "ti",
+   "senioridade": "junior",
+   "empresa": "BTG Pactual",
+   "titulo": "Engenheiro(a) de Software Junior(Full stack) | IT Accounting Clients & Finance Report",
+   "modalidade": "hibrido",
+   "publicada_em": "2025-10-28",
+   "url": "https://carreiras.btgpactual.com/vagas?gh_jid=5691138004"
+  },
+  {
+   "area": "ti",
+   "senioridade": "junior",
+   "empresa": "Inter",
+   "titulo": "CYBER SECURITY ANALYST I | APPSEC",
+   "modalidade": "nao_informada",
+   "publicada_em": "2026-10-20",
+   "url": "https://boards.greenhouse.io/inter/jobs/4744451005?gh_jid=4744451005"
+  },
+  {
+   "area": "ti",
+   "senioridade": "junior",
+   "empresa": "Inter",
+   "titulo": "TECH ASSISTANT CX",
+   "modalidade": "nao_informada",
+   "publicada_em": "2026-11-10",
+   "url": "https://boards.greenhouse.io/inter/jobs/4749552005?gh_jid=4749552005"
+  },
+  {
+   "area": "ti",
+   "senioridade": "junior",
+   "empresa": "Inter",
+   "titulo": "TECH OPS ANALYST I - QA TESTER | PE CROSS",
+   "modalidade": "nao_informada",
+   "publicada_em": "2026-11-11",
+   "url": "https://boards.greenhouse.io/inter/jobs/4744113005?gh_jid=4744113005"
+  },
+  {
+   "area": "ti",
+   "senioridade": "junior",
+   "empresa": "Neon",
+   "titulo": "Analista de Suporte Júnior | Afirmativa para PCD's",
+   "modalidade": "presencial",
+   "publicada_em": "2026-11-10",
+   "url": "https://jobs.lever.co/neon/6a8a25c3-5e0c-4761-a066-57db5c0e5948"
+  },
+  {
+   "area": "ti",
+   "senioridade": "junior",
+   "empresa": "Wildlife Studios",
+   "titulo": "Junior IT Support Analyst",
+   "modalidade": "nao_informada",
+   "publicada_em": "2026-10-02",
+   "url": "https://job-boards.greenhouse.io/wildlifestudios/jobs/8864949002"
+  },
+  {
+   "area": "ti",
+   "senioridade": "junior",
+   "empresa": "XP Inc.",
+   "titulo": "Engenheiro(a) de Software - Assistente e Júnior | Vaga exclusiva para Pessoa com Deficiência",
+   "modalidade": "presencial",
+   "publicada_em": "2025-10-03",
+   "url": "https://job-boards.greenhouse.io/xpinc/jobs/8147533002"
+  }
+ ],
+ "qualidade": [
+  {
+   "indicador": "vagas de dados sem nenhuma skill reconhecida",
+   "vagas": 1,
+   "pct": 1.1
+  },
+  {
+   "indicador": "vagas de dados sem nível no título",
+   "vagas": 33,
+   "pct": 34.7
+  },
+  {
+   "indicador": "vagas de dados com modalidade lida na descrição",
+   "vagas": 23,
+   "pct": 24.2
+  },
+  {
+   "indicador": "vagas de dados sem modalidade",
+   "vagas": 32,
+   "pct": 33.7
+  }
+ ]
+}

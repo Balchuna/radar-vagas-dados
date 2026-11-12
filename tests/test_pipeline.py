@@ -123,3 +123,27 @@ def test_empresa_inexistente_e_registrada_e_a_coleta_segue(tmp_path, extrator):
     resp["https://boards-api.greenhouse.io/v1/boards/gh1/jobs"] = NaoEncontrado("u")
     r = executar(banco, EMPRESAS, ClienteFalso(resp), extrator, agora="2026-11-01T00:00:00+00:00", log=lambda *_: None)
     assert r["nao_encontradas"] == 1 and r["empresas_ok"] == 3
+
+
+def test_skill_que_sai_do_dicionario_sai_do_banco(tmp_path, extrator):
+    """Trocar o nome de uma skill no dicionário não deixa a skill antiga para trás."""
+    from radar import db
+    from radar.skills import Skill
+
+    conn = db.conectar(tmp_path / "radar.db")
+    antigo = [Skill("ETL/ELT", "engenharia_dados", []), Skill("SQL", "linguagem", [])]
+    ids = db.sincronizar_skills(conn, antigo)
+    fonte = db.garantir_fonte(conn, "greenhouse", "teste", "https://exemplo/{slug}")
+    empresa = db.garantir_empresa(conn, fonte, "gh1", "Empresa GH")
+    conn.execute(
+        "INSERT INTO vagas (fonte_id, empresa_id, id_fonte, titulo, local, abrangencia, modalidade, modalidade_origem, "
+        "senioridade, area, url, hash_descricao, primeira_vez_vista, ultima_vez_vista, ativa) "
+        "VALUES (?, ?, '1', 'x', 'SP', 'brasil', 'remoto', 'fonte', 'junior', 'dados', 'u', 'h', 'a', 'a', 1)",
+        (fonte, empresa),
+    )
+    conn.execute("INSERT INTO vaga_skill VALUES (1, ?), (1, ?)", (ids["ETL/ELT"], ids["SQL"]))
+    novo = [Skill("ETL/pipelines de dados", "engenharia_dados", []), Skill("SQL", "linguagem", [])]
+    ids2 = db.sincronizar_skills(conn, novo)
+    assert set(ids2) == {"ETL/pipelines de dados", "SQL"}
+    assert [r[0] for r in conn.execute("SELECT skill_id FROM vaga_skill")] == [ids["SQL"]]
+    conn.close()

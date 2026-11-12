@@ -17,6 +17,10 @@ def main() -> None:
     args = parser.parse_args()
     resumo = executar(args.db)
     print("Resumo:", resumo)
+    if not resumo.get("empresas_ok"):
+        # Nenhuma empresa respondeu (rede fora, fontes bloqueadas): falha de propósito,
+        # para o cron não publicar uma página sem coleta nova.
+        sys.exit("Nenhuma empresa respondeu nesta execução.")
 
 
 if __name__ == "__main__":

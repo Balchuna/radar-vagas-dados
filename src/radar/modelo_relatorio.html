@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Radar de Vagas de Dados</title>
+<meta name="description" content="Skills, modalidade e nível das vagas de dados e TI no Brasil, coletadas semanalmente de APIs públicas de recrutamento. Coleta de {{data_coleta}}.">
+<style>
+  :root {
+    color-scheme: light;
+    --pagina: #f9f9f7;
+    --superficie: #fcfcfb;
+    --texto: #0b0b0b;
+    --texto-2: #52514e;
+    --texto-3: #6b6a66;
+    --grade: #e1e0d9;
+    --eixo: #c3c2b7;
+    --borda: rgba(11, 11, 11, 0.10);
+    --serie-1: #2a78d6;
+    --serie-2: #eb6834;
+    --serie-3: #1baf7a;
+    --neutro: #b5b3ab;
+    --link: #1c5cab;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --pagina: #0d0d0d;
+      --superficie: #1a1a19;
+      --texto: #f0efec;
+      --texto-2: #c3c2b7;
+      --texto-3: #a3a29b;
+      --grade: #2c2c2a;
+      --eixo: #383835;
+      --borda: rgba(255, 255, 255, 0.10);
+      --serie-1: #3987e5;
+      --serie-2: #d95926;
+      --serie-3: #199e70;
+      --neutro: #5c5b57;
+      --link: #86b6ef;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --pagina: #0d0d0d;
+    --superficie: #1a1a19;
+    --texto: #f0efec;
+    --texto-2: #c3c2b7;
+    --texto-3: #a3a29b;
+    --grade: #2c2c2a;
+    --eixo: #383835;
+    --borda: rgba(255, 255, 255, 0.10);
+    --serie-1: #3987e5;
+    --serie-2: #d95926;
+    --serie-3: #199e70;
+    --neutro: #5c5b57;
+    --link: #86b6ef;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--pagina);
+    color: var(--texto);
+    font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  a { color: var(--link); }
+  .pagina { max-width: 960px; margin: 0 auto; padding: 40px 16px 64px; }
+
+  header { margin-bottom: 32px; }
+  .sobretitulo { margin: 0 0 8px; color: var(--texto-2); font-size: 14px; letter-spacing: .02em; }
+  h1 { margin: 0 0 12px; font-size: clamp(28px, 5vw, 40px); line-height: 1.15; font-weight: 650; letter-spacing: -.01em; }
+  .abertura { margin: 0; max-width: 68ch; color: var(--texto-2); font-size: 17px; }
+  .abertura strong { color: var(--texto); font-weight: 600; }
+
+  /* 4 blocos: uma linha de 4 ou duas de 2, nunca 3 + 1 sobrando */
+  .blocos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0 0 16px; }
+  @media (min-width: 900px) { .blocos { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .bloco { background: var(--superficie); border: 1px solid var(--borda); border-radius: 12px; padding: 16px; }
+  .bloco .rotulo { margin: 0 0 4px; color: var(--texto-2); font-size: 14px; }
+  .bloco .valor { margin: 0; font-size: 32px; line-height: 1.1; font-weight: 600; }
+  .bloco .nota { margin: 6px 0 0; color: var(--texto-3); font-size: 13px; }
+
+  .frases { margin: 0 0 40px; padding-left: 20px; color: var(--texto-2); max-width: 72ch; }
+  .frases li { margin: 4px 0; }
+  .frases strong { color: var(--texto); font-weight: 600; }
+
+  section.cartao { background: var(--superficie); border: 1px solid var(--borda); border-radius: 12px; padding: 24px 20px 20px; margin: 0 0 20px; }
+  h2 { margin: 0 0 6px; font-size: 20px; line-height: 1.3; font-weight: 600; }
+  .explica { margin: 0 0 16px; color: var(--texto-2); font-size: 15px; max-width: 70ch; }
+  .legenda { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0 0 10px; padding: 0; list-style: none; color: var(--texto-2); font-size: 14px; }
+  .legenda li { display: flex; align-items: center; gap: 8px; }
+  .legenda i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+  .grafico { position: relative; width: 100%; }
+  .sem-grafico .grafico, .sem-grafico .legenda { display: none; }
+
+  details { margin-top: 14px; }
+  summary { cursor: pointer; color: var(--texto-2); font-size: 14px; }
+  .rolagem { overflow-x: auto; margin-top: 10px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; padding: 7px 10px 7px 0; border-bottom: 1px solid var(--grade); vertical-align: top; }
+  th { color: var(--texto-2); font-weight: 600; white-space: nowrap; }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .sempre table { margin-top: 4px; }
+
+  .aviso { margin: 0; padding: 12px 14px; border-radius: 8px; background: var(--pagina); color: var(--texto-2); font-size: 15px; }
+
+  footer { margin-top: 40px; color: var(--texto-2); font-size: 14px; }
+  footer h2 { font-size: 17px; color: var(--texto); }
+  footer ul { padding-left: 20px; }
+  footer li { margin: 4px 0; }
+  code { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: .92em; }
+</style>
+</head>
+<body>
+<div class="pagina">
+  <header>
+    <p class="sobretitulo">Radar de Vagas de Dados e TI · Brasil</p>
+    <h1>O que as vagas de dados pedem</h1>
+    <p class="abertura">{{abertura}}</p>
+  </header>
+
+  <div class="blocos">{{blocos}}</div>
+  <ul class="frases">{{frases}}</ul>
+
+  <section class="cartao" id="skills">
+    <h2>Skills mais pedidas nas vagas de dados</h2>
+    <p class="explica">Percentual das {{vagas_dados}} vagas de dados abertas que citam cada skill no título ou na descrição. Uma vaga costuma citar várias.</p>
+    <div class="grafico" style="height: {{altura_skills}}px"><canvas id="graf-skills" role="img" aria-label="Barras horizontais: percentual das vagas de dados que citam cada skill. Os valores estão na tabela abaixo."></canvas></div>
+    <details><summary>Ver tabela</summary><div class="rolagem">{{tabela_skills}}</div></details>
+  </section>
+
+  <section class="cartao" id="nivel">
+    <h2>Vagas de entrada pedem coisas diferentes?</h2>
+    <p class="explica">Compara as {{vagas_acessiveis}} vagas de dados de estágio, júnior ou sem nível no título (as que, em tese, aceitam quem está começando) com as {{vagas_pleno}} de pleno para cima. Só entram skills citadas em pelo menos 10 vagas de dados. No topo, as mais típicas das vagas de entrada.</p>
+    <ul class="legenda" aria-hidden="true"><li><i style="background: var(--serie-1)"></i>Estágio, júnior ou sem nível</li><li><i style="background: var(--serie-2)"></i>Pleno, sênior ou liderança</li></ul>
+    <div class="grafico" style="height: {{altura_nivel}}px"><canvas id="graf-nivel" role="img" aria-label="Barras agrupadas: percentual de cada skill nas vagas de entrada e nas de pleno para cima. Os valores estão na tabela abaixo."></canvas></div>
+    <p class="explica" style="margin-top: 14px">As amostras são pequenas. A coluna "margem" da tabela é a margem de erro aproximada da diferença (95%). Diferença menor que a margem pode ser só acaso.</p>
+    <details><summary>Ver tabela</summary><div class="rolagem">{{tabela_nivel}}</div></details>
+  </section>
+
+  <section class="cartao" id="bi">
+    <h2>Power BI, Looker ou Tableau?</h2>
+    <p class="explica">Percentual das vagas de dados que citam cada ferramenta de BI.</p>
+    <div class="grafico" style="height: {{altura_bi}}px"><canvas id="graf-bi" role="img" aria-label="Barras horizontais: percentual das vagas de dados que citam cada ferramenta de BI. Os valores estão na tabela abaixo."></canvas></div>
+    <details><summary>Ver tabela</summary><div class="rolagem">{{tabela_bi}}</div></details>
+    <div class="sempre"><p class="explica" style="margin: 16px 0 0">Quantas vagas pedem só uma das três:</p><div class="rolagem">{{tabela_bi_comb}}</div></div>
+  </section>
+
+  <section class="cartao" id="modalidade">
+    <h2>Remoto, híbrido ou presencial</h2>
+    <p class="explica">Modalidade informada pela fonte, pelo local ou pela descrição da vaga. A parte cinza são vagas que não dizem a modalidade.</p>
+    <ul class="legenda" aria-hidden="true"><li><i style="background: var(--serie-1)"></i>Remoto</li><li><i style="background: var(--serie-2)"></i>Híbrido</li><li><i style="background: var(--serie-3)"></i>Presencial</li><li><i style="background: var(--neutro)"></i>Não informada</li></ul>
+    <div class="grafico" style="height: 170px"><canvas id="graf-modalidade" role="img" aria-label="Barras empilhadas de 100%: divisão entre remoto, híbrido, presencial e não informada. Os valores estão na tabela abaixo."></canvas></div>
+    <details><summary>Ver tabela</summary><div class="rolagem">{{tabela_modalidade}}</div></details>
+  </section>
+
+  <section class="cartao" id="pares">
+    <h2>Skills que andam juntas</h2>
+    <p class="explica">Pares de skills citados na mesma vaga de dados.</p>
+    <div class="sempre rolagem">{{tabela_pares}}</div>
+  </section>
+
+  <section class="cartao" id="empresas">
+    <h2>Empresas que mais publicam vagas de dados</h2>
+    <p class="explica">Só entre as {{empresas_consultadas}} empresas acompanhadas. Não é um ranking do mercado.</p>
+    <ul class="legenda" aria-hidden="true"><li><i style="background: var(--serie-1)"></i>Estágio, júnior ou sem nível</li><li><i style="background: var(--serie-2)"></i>Pleno, sênior ou liderança</li></ul>
+    <div class="grafico" style="height: {{altura_empresas}}px"><canvas id="graf-empresas" role="img" aria-label="Barras empilhadas: vagas de dados por empresa, divididas por nível. Os valores estão na tabela abaixo."></canvas></div>
+    <details><summary>Ver tabela</summary><div class="rolagem">{{tabela_empresas}}</div></details>
+  </section>
+
+  <section class="cartao" id="idade">
+    <h2>Há quanto tempo as vagas estão abertas</h2>
+    <p class="explica">Dias entre a publicação e a coleta, nas vagas de dados abertas. Vaga antiga e ainda aberta pode ser difícil de preencher ou ter sido esquecida no ar.</p>
+    <div class="grafico" style="height: 220px"><canvas id="graf-idade" role="img" aria-label="Colunas: vagas de dados por faixa de dias desde a publicação. Os valores estão na tabela abaixo."></canvas></div>
+    <details><summary>Ver tabela</summary><div class="rolagem">{{tabela_idade}}</div></details>
+  </section>
+
+  <section class="cartao" id="evolucao">
+    <h2>Evolução semana a semana</h2>
+    <p class="explica">Vagas de dados vistas em cada semana com coleta. A série cresce a cada execução semanal.</p>
+    {{evolucao_aviso}}
+    <div class="grafico" style="height: 240px"><canvas id="graf-evolucao" role="img" aria-label="Linha: vagas de dados vistas por semana. Os valores estão na tabela abaixo."></canvas></div>
+    <details><summary>Ver tabela</summary><div class="rolagem">{{tabela_evolucao}}</div></details>
+  </section>
+
+  <section class="cartao" id="entrada">
+    <h2>Vagas abertas de estágio e júnior</h2>
+    <p class="explica">Vagas de dados e TI que dizem estágio ou júnior no título, na data da coleta. Confira na página da empresa se a vaga ainda está aberta.</p>
+    <div class="sempre rolagem">{{tabela_entrada}}</div>
+  </section>
+
+  <footer>
+    <h2>Como ler estes números</h2>
+    <ul>
+      <li>Fontes: APIs públicas de vagas do Greenhouse, da Lever e da Ashby, só para as {{empresas_consultadas}} empresas da lista do projeto, com vaga no Brasil ou na América Latina. Não representa o mercado inteiro: Gupy e LinkedIn ficaram de fora (veja <code>docs/FONTES.md</code>).</li>
+      <li>Área e nível saem de regras sobre o título da vaga. Skills saem de um dicionário de sinônimos (versão {{versao_skills}}). Ambos erram: veja os indicadores abaixo.</li>
+      <li>O texto das descrições não é guardado. O banco tem só metadados, as skills encontradas, um hash do texto e o link.</li>
+    </ul>
+    <div class="rolagem">{{tabela_qualidade}}</div>
+    <p>Coleta de {{data_coleta}}. Página gerada por <code>python scripts/relatorio.py</code> a partir de <code>sql/analises.sql</code>. Código e método: <a href="https://github.com/Balchuna/radar-vagas-dados">github.com/Balchuna/radar-vagas-dados</a>.</p>
+  </footer>
+</div>
+
+<script id="dados" type="application/json">{{dados_json}}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" integrity="sha384-bs/nf9FbdNouRbMiFcrcZfLXYPKiPaGVGplVbv7dLGECccEXDW+S3zjqSKR5ZEaD" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+(function () {
+  "use strict";
+  if (typeof Chart === "undefined") {
+    // Sem a biblioteca (offline ou bloqueada): os números continuam nas tabelas.
+    document.querySelectorAll(".grafico").forEach(function (g) { g.closest("section").classList.add("sem-grafico"); });
+    document.querySelectorAll("section details").forEach(function (d) { d.open = true; });
+    return;
+  }
+  var dados = JSON.parse(document.getElementById("dados").textContent);
+  var num = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 1 });
+  // Percentuais sempre com uma casa (32,0%), como nas tabelas geradas pelo Python.
+  var dec = new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  var graficos = [];
+
+  function cor(nome) { return getComputedStyle(document.documentElement).getPropertyValue(nome).trim(); }
+
+  // Escreve o valor na ponta de cada barra (só em gráficos de uma série).
+  var rotuloNaPonta = {
+    id: "rotuloNaPonta",
+    afterDatasetsDraw: function (chart, args, opcoes) {
+      if (!opcoes || !opcoes.ligado) return;
+      var ctx = chart.ctx;
+      var meta = chart.getDatasetMeta(0);
+      ctx.save();
+      ctx.fillStyle = cor("--texto-2");
+      ctx.font = "13px system-ui, -apple-system, 'Segoe UI', sans-serif";
+      var horizontal = chart.options.indexAxis === "y";
+      ctx.textAlign = horizontal ? "left" : "center";
+      ctx.textBaseline = horizontal ? "middle" : "bottom";
+      meta.data.forEach(function (barra, i) {
+        var valor = chart.data.datasets[0].data[i];
+        if (valor === null || valor === undefined) return;
+        var texto = opcoes.sufixo === "%" ? dec.format(valor) + "%" : num.format(valor) + (opcoes.sufixo || "");
+        if (horizontal) ctx.fillText(texto, barra.x + 6, barra.y);
+        else ctx.fillText(texto, barra.x, barra.y - 4);
+      });
+      ctx.restore();
+    }
+  };
+
+  function base(horizontal, extra) {
+    var grade = cor("--grade");
+    var eixo = cor("--eixo");
+    var texto2 = cor("--texto-2");
+    var o = {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      indexAxis: horizontal ? "y" : "x",
+      layout: { padding: { right: horizontal ? 52 : 8, top: horizontal ? 0 : 20 } },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: cor("--texto"),
+          titleColor: cor("--superficie"),
+          bodyColor: cor("--superficie"),
+          padding: 10,
+          displayColors: true,
+          boxPadding: 4
+        }
+      },
+      scales: {
+        x: { grid: { color: horizontal ? grade : "transparent", drawTicks: false }, border: { color: eixo }, ticks: { color: texto2, padding: 6 } },
+        y: { grid: { color: horizontal ? "transparent" : grade, drawTicks: false }, border: { color: eixo }, ticks: { color: texto2, padding: 6 } }
+      }
+    };
+    return Object.assign(o, extra || {});
+  }
+
+  function barras(id, rotulos, series, opcoes) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var c = new Chart(el, {
+      type: "bar",
+      data: {
+        labels: rotulos,
+        datasets: series.map(function (s) {
+          return {
+            label: s.nome,
+            data: s.valores,
+            backgroundColor: cor(s.cor),
+            borderColor: cor("--superficie"),
+            borderWidth: opcoes.empilhado ? { right: 2, left: 0, top: 0, bottom: 0 } : 0,
+            borderSkipped: opcoes.empilhado ? false : "start",
+            borderRadius: opcoes.empilhado ? 0 : 4,
+            maxBarThickness: opcoes.espessura || 18,
+            categoryPercentage: opcoes.categoria || 0.8,
+            barPercentage: opcoes.barra || 0.9
+          };
+        })
+      },
+      options: opcoes.config,
+      plugins: [rotuloNaPonta]
+    });
+    graficos.push(c);
+  }
+
+  function pct(v) { return v === null || v === undefined ? "—" : dec.format(v) + "%"; }
+
+  function desenhar() {
+    graficos.forEach(function (g) { g.destroy(); });
+    graficos = [];
+    Chart.defaults.font.family = "system-ui, -apple-system, 'Segoe UI', sans-serif";
+    Chart.defaults.font.size = 13;
+    Chart.defaults.color = cor("--texto-2");
+
+    // 1. Top skills
+    var sk = dados.top_skills_dados;
+    var cfg1 = base(true);
+    cfg1.scales.x.ticks.callback = function (v) { return v + "%"; };
+    cfg1.scales.x.suggestedMax = 100;
+    cfg1.plugins.rotuloNaPonta = { ligado: true, sufixo: "%" };
+    cfg1.plugins.tooltip.callbacks = { label: function (c) { var l = sk[c.dataIndex]; return " " + pct(l.pct) + " das vagas de dados (" + l.vagas + ")"; } };
+    barras("graf-skills", sk.map(function (l) { return l.skill; }), [{ nome: "Vagas de dados", valores: sk.map(function (l) { return l.pct; }), cor: "--serie-1" }], { config: cfg1 });
+
+    // 2. Entrada x pleno ou acima
+    var nv = dados.skills_por_nivel_dados;
+    var cfg2 = base(true);
+    cfg2.scales.x.ticks.callback = function (v) { return v + "%"; };
+    cfg2.scales.x.suggestedMax = 100;
+    cfg2.plugins.tooltip.callbacks = {
+      label: function (c) {
+        var l = nv[c.dataIndex];
+        return c.datasetIndex === 0
+          ? " Entrada: " + pct(l.pct_acessiveis) + " (" + l.vagas_acessiveis + " de " + l.total_acessiveis + ")"
+          : " Pleno ou acima: " + pct(l.pct_pleno_ou_acima) + " (" + l.vagas_pleno_ou_acima + " de " + l.total_pleno_ou_acima + ")";
+      },
+      afterBody: function (itens) {
+        var l = nv[itens[0].dataIndex];
+        return "Diferença: " + dec.format(l.diferenca_pp) + " p.p. (margem ±" + dec.format(l.margem_95_pp) + ")";
+      }
+    };
+    barras("graf-nivel", nv.map(function (l) { return l.skill; }), [
+      { nome: "Estágio, júnior ou sem nível", valores: nv.map(function (l) { return l.pct_acessiveis; }), cor: "--serie-1" },
+      { nome: "Pleno, sênior ou liderança", valores: nv.map(function (l) { return l.pct_pleno_ou_acima; }), cor: "--serie-2" }
+    ], { config: cfg2, espessura: 10, categoria: 0.78, barra: 0.92 });
+
+    // 3. Ferramentas de BI
+    var bi = dados.ferramentas_bi;
+    var cfg3 = base(true);
+    cfg3.scales.x.ticks.callback = function (v) { return v + "%"; };
+    cfg3.plugins.rotuloNaPonta = { ligado: true, sufixo: "%" };
+    cfg3.plugins.tooltip.callbacks = { label: function (c) { var l = bi[c.dataIndex]; return " " + pct(l.pct) + " das vagas de dados (" + l.vagas + ")"; } };
+    barras("graf-bi", bi.map(function (l) { return l.skill; }), [{ nome: "Vagas de dados", valores: bi.map(function (l) { return l.pct; }), cor: "--serie-1" }], { config: cfg3 });
+
+    // 4. Modalidade (100% empilhado)
+    var md = dados.modalidade;
+    var recortes = [["dados", "Dados"], ["dados_e_ti", "Dados e TI"], ["todas", "Todas as vagas"]];
+    var tipos = [["remoto", "Remoto", "--serie-1"], ["hibrido", "Híbrido", "--serie-2"], ["presencial", "Presencial", "--serie-3"], ["nao_informada", "Não informada", "--neutro"]];
+    function valorMod(r, t) {
+      var l = md.filter(function (x) { return x.recorte === r && x.modalidade === t; })[0];
+      return l ? l.pct_do_recorte : 0;
+    }
+    var cfg4 = base(true);
+    cfg4.layout.padding.right = 8;
+    cfg4.scales.x.stacked = true;
+    cfg4.scales.y.stacked = true;
+    cfg4.scales.x.max = 100;
+    cfg4.scales.x.ticks.callback = function (v) { return v + "%"; };
+    cfg4.plugins.tooltip.callbacks = { label: function (c) { return " " + c.dataset.label + ": " + pct(c.raw); } };
+    barras("graf-modalidade", recortes.map(function (r) { return r[1]; }), tipos.map(function (t) {
+      return { nome: t[1], valores: recortes.map(function (r) { return valorMod(r[0], t[0]); }), cor: t[2] };
+    }), { config: cfg4, empilhado: true, espessura: 24 });
+
+    // 5. Empresas (empilhado por nível)
+    var em = dados.empresas_dados;
+    var cfg5 = base(true);
+    cfg5.layout.padding.right = 8;
+    cfg5.scales.x.stacked = true;
+    cfg5.scales.y.stacked = true;
+    cfg5.scales.x.ticks.precision = 0;
+    cfg5.plugins.tooltip.callbacks = { label: function (c) { return " " + c.dataset.label + ": " + c.raw; } };
+    barras("graf-empresas", em.map(function (l) { return l.empresa; }), [
+      { nome: "Estágio, júnior ou sem nível", valores: em.map(function (l) { return l.dados_acessiveis; }), cor: "--serie-1" },
+      { nome: "Pleno, sênior ou liderança", valores: em.map(function (l) { return l.vagas_dados - l.dados_acessiveis; }), cor: "--serie-2" }
+    ], { config: cfg5, empilhado: true });
+
+    // 6. Idade das vagas
+    var id = dados.idade_vagas_dados;
+    var cfg6 = base(false);
+    cfg6.scales.y.ticks.precision = 0;
+    cfg6.plugins.rotuloNaPonta = { ligado: true, sufixo: "" };
+    cfg6.plugins.tooltip.callbacks = { label: function (c) { var l = id[c.dataIndex]; return " " + l.vagas + " vagas (" + pct(l.pct) + ")"; } };
+    barras("graf-idade", id.map(function (l) { return l.faixa; }), [{ nome: "Vagas de dados", valores: id.map(function (l) { return l.vagas; }), cor: "--serie-1" }], { config: cfg6, espessura: 24 });
+
+    // 7. Evolução semanal (só com duas semanas ou mais)
+    var ev = dados.evolucao_semanal;
+    var el = document.getElementById("graf-evolucao");
+    if (ev.length < 2) {
+      el.closest("section").classList.add("sem-grafico");
+    } else {
+      var cfg7 = base(false);
+      cfg7.layout.padding.right = 24;
+      cfg7.scales.y.beginAtZero = true;
+      cfg7.scales.y.ticks.precision = 0;
+      cfg7.interaction = { mode: "index", intersect: false };
+      cfg7.plugins.tooltip.callbacks = { label: function (c) { var l = ev[c.dataIndex]; return " " + l.dados_vistas + " vistas, " + l.dados_novas + " novas, " + l.dados_encerradas + " encerradas"; } };
+      graficos.push(new Chart(el, {
+        type: "line",
+        data: {
+          labels: ev.map(function (l) { return l.semana.split("-").reverse().join("/"); }),
+          datasets: [{
+            label: "Vagas de dados vistas",
+            data: ev.map(function (l) { return l.dados_vistas; }),
+            borderColor: cor("--serie-1"),
+            backgroundColor: cor("--serie-1"),
+            borderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            pointBorderColor: cor("--superficie"),
+            pointBorderWidth: 2,
+            tension: 0
+          }]
+        },
+        options: cfg7
+      }));
+    }
+  }
+
+  desenhar();
+  if (window.matchMedia) {
+    var mq = window.matchMedia("(prefers-color-scheme: dark)");
+    if (mq.addEventListener) mq.addEventListener("change", desenhar);
+  }
+  // Tema forçado por quem incorpora a página (atributo data-theme no <html>).
+  if (window.MutationObserver) {
+    new MutationObserver(desenhar).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  }
+})();
+</script>
+</body>
+</html>

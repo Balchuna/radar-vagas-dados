@@ -22,6 +22,10 @@ def test_dicionario_tem_cerca_de_60_skills_sem_repeticao():
     ("APIs REST e JSON", {"APIs REST", "JSON"}),
     ("Looker Studio e BigQuery", {"Looker", "BigQuery"}),
     ("C# e .NET", {"C#"}),
+    ("Desejável VBA e macros do Excel", {"VBA", "Excel/planilhas"}),
+    ("Experiência com testes A/B e desenho de experimentos", {"Testes A/B"}),
+    ("Vivência em metodologias ágeis (Scrum)", {"Scrum/Ágil"}),
+    ("GA4 e Google Tag Manager", {"Google Analytics"}),
 ])
 def test_encontra_skills_e_sinonimos(extrator, texto, esperadas):
     assert set(extrator.extrair(texto)) == esperadas
@@ -38,6 +42,12 @@ def test_encontra_skills_e_sinonimos(extrator, texto, esperadas):
     ("Biblioteca MySQLi do PHP", "SQL"),
     ("Arquiteto de Sistemas SAP", "Python"),
     ("Planejamento estratégico", "R"),
+    # achados na auditoria das vagas reais de 12/11/2026
+    ("Transformações no dbt (macros, tests, docs)", "VBA"),
+    ("The group brings together GTM Engineering and Sales", "Google Analytics"),
+    ("We move fast, stay agile and favor action", "Scrum/Ágil"),
+    ("Drive experimentation and iteration", "Testes A/B"),
+    ("Inferência de modelos em produção", "Estatística"),
 ])
 def test_falsos_positivos(extrator, texto, nao_pode):
     assert nao_pode not in extrator.extrair(texto)

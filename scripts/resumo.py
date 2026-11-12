@@ -1,11 +1,13 @@
-"""Imprime o resumo do banco: volume, período, recortes e top skills.
-Todo número citado no README e no currículo sai deste comando (ou de sql/analises.sql).
+"""Visão operacional do banco: execuções, status por empresa, volume e descartes.
+Os números das análises (README, página e currículo) saem de scripts/relatorio.py,
+que roda sql/analises.sql.
 
 Uso:  python scripts/resumo.py [--db radar.db]
 """
 import argparse
 import sqlite3
 import sys
+from pathlib import Path
 
 sys.stdout.reconfigure(encoding="utf-8")
 
@@ -20,7 +22,10 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--db", default="radar.db")
     args = parser.parse_args()
-    conn = sqlite3.connect(args.db)
+    caminho = Path(args.db).resolve()
+    if not caminho.exists():
+        sys.exit(f"Banco não encontrado: {caminho}")
+    conn = sqlite3.connect(f"{caminho.as_uri()}?mode=ro", uri=True)  # só leitura
 
     tabela(conn, "Execuções de coleta (início UTC | empresas | ok | bloqueadas | erros)", """
         SELECT execucao, COUNT(*), SUM(status = 'ok'), SUM(status IN ('bloqueada', 'pulada')), SUM(status = 'erro')

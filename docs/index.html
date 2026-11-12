@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Radar de Vagas de Dados</title>
+<meta name="description" content="Skills, modalidade e nível das vagas de dados e TI no Brasil, coletadas semanalmente de APIs públicas de recrutamento. Coleta de 12/11/2026.">
+<style>
+  :root {
+    color-scheme: light;
+    --pagina: #f9f9f7;
+    --superficie: #fcfcfb;
+    --texto: #0b0b0b;
+    --texto-2: #52514e;
+    --texto-3: #6b6a66;
+    --grade: #e1e0d9;
+    --eixo: #c3c2b7;
+    --borda: rgba(11, 11, 11, 0.10);
+    --serie-1: #2a78d6;
+    --serie-2: #eb6834;
+    --serie-3: #1baf7a;
+    --neutro: #b5b3ab;
+    --link: #1c5cab;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --pagina: #0d0d0d;
+      --superficie: #1a1a19;
+      --texto: #f0efec;
+      --texto-2: #c3c2b7;
+      --texto-3: #a3a29b;
+      --grade: #2c2c2a;
+      --eixo: #383835;
+      --borda: rgba(255, 255, 255, 0.10);
+      --serie-1: #3987e5;
+      --serie-2: #d95926;
+      --serie-3: #199e70;
+      --neutro: #5c5b57;
+      --link: #86b6ef;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --pagina: #0d0d0d;
+    --superficie: #1a1a19;
+    --texto: #f0efec;
+    --texto-2: #c3c2b7;
+    --texto-3: #a3a29b;
+    --grade: #2c2c2a;
+    --eixo: #383835;
+    --borda: rgba(255, 255, 255, 0.10);
+    --serie-1: #3987e5;
+    --serie-2: #d95926;
+    --serie-3: #199e70;
+    --neutro: #5c5b57;
+    --link: #86b6ef;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--pagina);
+    color: var(--texto);
+    font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  a { color: var(--link); }
+  .pagina { max-width: 960px; margin: 0 auto; padding: 40px 16px 64px; }
+
+  header { margin-bottom: 32px; }
+  .sobretitulo { margin: 0 0 8px; color: var(--texto-2); font-size: 14px; letter-spacing: .02em; }
+  h1 { margin: 0 0 12px; font-size: clamp(28px, 5vw, 40px); line-height: 1.15; font-weight: 650; letter-spacing: -.01em; }
+  .abertura { margin: 0; max-width: 68ch; color: var(--texto-2); font-size: 17px; }
+  .abertura strong { color: var(--texto); font-weight: 600; }
+
+  /* 4 blocos: uma linha de 4 ou duas de 2, nunca 3 + 1 sobrando */
+  .blocos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0 0 16px; }
+  @media (min-width: 900px) { .blocos { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .bloco { background: var(--superficie); border: 1px solid var(--borda); border-radius: 12px; padding: 16px; }
+  .bloco .rotulo { margin: 0 0 4px; color: var(--texto-2); font-size: 14px; }
+  .bloco .valor { margin: 0; font-size: 32px; line-height: 1.1; font-weight: 600; }
+  .bloco .nota { margin: 6px 0 0; color: var(--texto-3); font-size: 13px; }
+
+  .frases { margin: 0 0 40px; padding-left: 20px; color: var(--texto-2); max-width: 72ch; }
+  .frases li { margin: 4px 0; }
+  .frases strong { color: var(--texto); font-weight: 600; }
+
+  section.cartao { background: var(--superficie); border: 1px solid var(--borda); border-radius: 12px; padding: 24px 20px 20px; margin: 0 0 20px; }
+  h2 { margin: 0 0 6px; font-size: 20px; line-height: 1.3; font-weight: 600; }
+  .explica { margin: 0 0 16px; color: var(--texto-2); font-size: 15px; max-width: 70ch; }
+  .legenda { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0 0 10px; padding: 0; list-style: none; color: var(--texto-2); font-size: 14px; }
+  .legenda li { display: flex; align-items: center; gap: 8px; }
+  .legenda i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+  .grafico { position: relative; width: 100%; }
+  .sem-grafico .grafico, .sem-grafico .legenda { display: none; }
+
+  details { margin-top: 14px; }
+  summary { cursor: pointer; color: var(--texto-2); font-size: 14px; }
+  .rolagem { overflow-x: auto; margin-top: 10px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; padding: 7px 10px 7px 0; border-bottom: 1px solid var(--grade); vertical-align: top; }
+  th { color: var(--texto-2); font-weight: 600; white-space: nowrap; }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .sempre table { margin-top: 4px; }
+
+  .aviso { margin: 0; padding: 12px 14px; border-radius: 8px; background: var(--pagina); color: var(--texto-2); font-size: 15px; }
+
+  footer { margin-top: 40px; color: var(--texto-2); font-size: 14px; }
+  footer h2 { font-size: 17px; color: var(--texto); }
+  footer ul { padding-left: 20px; }
+  footer li { margin: 4px 0; }
+  code { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: .92em; }
+</style>
+</head>
+<body>
+<div class="pagina">
+  <header>
+    <p class="sobretitulo">Radar de Vagas de Dados e TI · Brasil</p>
+    <h1>O que as vagas de dados pedem</h1>
+    <p class="abertura">Vagas abertas no Brasil e na América Latina em <strong>31 empresas</strong>, lidas nas APIs públicas de recrutamento do Greenhouse, da Lever e da Ashby. Coleta de <strong>12/11/2026</strong>. A pergunta: quais skills as vagas de dados pedem, e o que muda nas vagas para quem está começando?</p>
+  </header>
+
+  <div class="blocos"><div class="bloco"><p class="rotulo">Vagas abertas acompanhadas</p><p class="valor">1.505</p><p class="nota">em 30 empresas</p></div><div class="bloco"><p class="rotulo">Vagas de dados</p><p class="valor">95</p><p class="nota">e 341 de TI</p></div><div class="bloco"><p class="rotulo">Dados: entrada ou sem nível</p><p class="valor">34</p><p class="nota">1 diz estágio ou júnior</p></div><div class="bloco"><p class="rotulo">Data da coleta</p><p class="valor">12/11/2026</p><p class="nota">7 execuções desde 12/11/2026</p></div></div>
+  <ul class="frases"><li><strong>Python</strong> aparece em 78,9% das vagas de dados, e <strong>SQL</strong> em 76,8%.</li><li>Só <strong>1</strong> das 95 vagas de dados diz estágio ou júnior no título; 33 não dizem o nível.</li><li>Entre as vagas de dados que informam a modalidade, <strong>79,4%</strong> são remotas.</li><li><strong>69,5%</strong> das vagas de dados não citam Power BI, Looker nem Tableau.</li><li>Diferenças entre vagas de entrada e de pleno para cima maiores que a margem de erro: Terraform/IaC (−18,7 p.p.), Airflow (−18,8 p.p.), Spark (−21,4 p.p.), Python (−22,2 p.p.), CI/CD (−24,3 p.p.).</li></ul>
+
+  <section class="cartao" id="skills">
+    <h2>Skills mais pedidas nas vagas de dados</h2>
+    <p class="explica">Percentual das 95 vagas de dados abertas que citam cada skill no título ou na descrição. Uma vaga costuma citar várias.</p>
+    <div class="grafico" style="height: 560px"><canvas id="graf-skills" role="img" aria-label="Barras horizontais: percentual das vagas de dados que citam cada skill. Os valores estão na tabela abaixo."></canvas></div>
+    <details><summary>Ver tabela</summary><div class="rolagem"><table><thead><tr><th>Skill</th><th class="n">Vagas</th><th class="n">% das vagas de dados</th></tr></thead><tbody><tr><td>Python</td><td class="n">75</td><td class="n">78,9%</td></tr><tr><td>SQL</td><td class="n">73</td><td class="n">76,8%</td></tr><tr><td>ETL/pipelines de dados</td><td class="n">44</td><td class="n">46,3%</td></tr><tr><td>AWS</td><td class="n">33</td><td class="n">34,7%</td></tr><tr><td>Airflow</td><td class="n">31</td><td class="n">32,6%</td></tr><tr><td>Databricks</td><td class="n">30</td><td class="n">31,6%</td></tr><tr><td>Estatística</td><td class="n">28</td><td class="n">29,5%</td></tr><tr><td>Inglês</td><td class="n">27</td><td class="n">28,4%</td></tr><tr><td>Machine Learning</td><td class="n">27</td><td class="n">28,4%</td></tr><tr><td>Spark</td><td class="n">27</td><td class="n">28,4%</td></tr><tr><td>CI/CD</td><td class="n">26</td><td class="n">27,4%</td></tr><tr><td>Git</td><td class="n">26</td><td class="n">27,4%</td></tr><tr><td>Data Warehouse/Lake</td><td class="n">25</td><td class="n">26,3%</td></tr><tr><td>IA generativa / LLM</td><td class="n">25</td><td class="n">26,3%</td></tr><tr><td>Modelagem de dados</td><td class="n">24</td><td class="n">25,3%</td></tr><tr><td>Power BI</td><td class="n">20</td><td class="n">21,1%</td></tr><tr><td>dbt</td><td class="n">18</td><td class="n">18,9%</td></tr><tr><td>Azure</td><td class="n">17</td><td class="n">17,9%</td></tr><tr><td>Terraform/IaC</td><td class="n">17</td><td class="n">17,9%</td></tr><tr><td>GCP</td><td class="n">16</td><td class="n">16,8%</td></tr></tbody></table></div></details>
+  </section>
+
+  <section class="cartao" id="nivel">
+    <h2>Vagas de entrada pedem coisas diferentes?</h2>
+    <p class="explica">Compara as 34 vagas de dados de estágio, júnior ou sem nível no título (as que, em tese, aceitam quem está começando) com as 61 de pleno para cima. Só entram skills citadas em pelo menos 10 vagas de dados. No topo, as mais típicas das vagas de entrada.</p>
+    <ul class="legenda" aria-hidden="true"><li><i style="background: var(--serie-1)"></i>Estágio, júnior ou sem nível</li><li><i style="background: var(--serie-2)"></i>Pleno, sênior ou liderança</li></ul>
+    <div class="grafico" style="height: 890px"><canvas id="graf-nivel" role="img" aria-label="Barras agrupadas: percentual de cada skill nas vagas de entrada e nas de pleno para cima. Os valores estão na tabela abaixo."></canvas></div>
+    <p class="explica" style="margin-top: 14px">As amostras são pequenas. A coluna "margem" da tabela é a margem de erro aproximada da diferença (95%). Diferença menor que a margem pode ser só acaso.</p>
+    <details><summary>Ver tabela</summary><div class="rolagem"><table><thead><tr><th>Skill</th><th class="n">Entrada</th><th class="n">Pleno ou acima</th><th class="n">Diferença (p.p.)</th><th class="n">Margem (±p.p.)</th><th>Maior que a margem?</th></tr></thead><tbody><tr><td>Estatística</td><td class="n">41,2% (14/34)</td><td class="n">23,0% (14/61)</td><td class="n">18,2</td><td class="n">19,6</td><td>não</td></tr><tr><td>Looker</td><td class="n">26,5% (9/34)</td><td class="n">9,8% (6/61)</td><td class="n">16,6</td><td class="n">16,6</td><td>não</td></tr><tr><td>Excel/planilhas</td><td class="n">23,5% (8/34)</td><td class="n">9,8% (6/61)</td><td class="n">13,7</td><td class="n">16,1</td><td>não</td></tr><tr><td>Power BI</td><td class="n">29,4% (10/34)</td><td class="n">16,4% (10/61)</td><td class="n">13,0</td><td class="n">17,9</td><td>não</td></tr><tr><td>Tableau</td><td class="n">23,5% (8/34)</td><td class="n">13,1% (8/61)</td><td class="n">10,4</td><td class="n">16,6</td><td>não</td></tr><tr><td>Snowflake</td><td class="n">14,7% (5/34)</td><td class="n">13,1% (8/61)</td><td class="n">1,6</td><td class="n">14,6</td><td>não</td></tr><tr><td>Inglês</td><td class="n">29,4% (10/34)</td><td class="n">27,9% (17/61)</td><td class="n">1,5</td><td class="n">19,0</td><td>não</td></tr><tr><td>AWS</td><td class="n">35,3% (12/34)</td><td class="n">34,4% (21/61)</td><td class="n">0,9</td><td class="n">20,0</td><td>não</td></tr><tr><td>dbt</td><td class="n">17,6% (6/34)</td><td class="n">19,7% (12/61)</td><td class="n">-2,0</td><td class="n">16,2</td><td>não</td></tr><tr><td>ETL/pipelines de dados</td><td class="n">44,1% (15/34)</td><td class="n">47,5% (29/61)</td><td class="n">-3,4</td><td class="n">20,9</td><td>não</td></tr><tr><td>Git</td><td class="n">23,5% (8/34)</td><td class="n">29,5% (18/61)</td><td class="n">-6,0</td><td class="n">18,3</td><td>não</td></tr><tr><td>Modelagem de dados</td><td class="n">20,6% (7/34)</td><td class="n">27,9% (17/61)</td><td class="n">-7,3</td><td class="n">17,6</td><td>não</td></tr><tr><td>GCP</td><td class="n">11,8% (4/34)</td><td class="n">19,7% (12/61)</td><td class="n">-7,9</td><td class="n">14,7</td><td>não</td></tr><tr><td>Databricks</td><td class="n">26,5% (9/34)</td><td class="n">34,4% (21/61)</td><td class="n">-8,0</td><td class="n">19,0</td><td>não</td></tr><tr><td>BigQuery</td><td class="n">5,9% (2/34)</td><td class="n">14,8% (9/61)</td><td class="n">-8,9</td><td class="n">11,9</td><td>não</td></tr><tr><td>Data Warehouse/Lake</td><td class="n">20,6% (7/34)</td><td class="n">29,5% (18/61)</td><td class="n">-8,9</td><td class="n">17,8</td><td>não</td></tr><tr><td>IA generativa / LLM</td><td class="n">20,6% (7/34)</td><td class="n">29,5% (18/61)</td><td class="n">-8,9</td><td class="n">17,8</td><td>não</td></tr><tr><td>Machine Learning</td><td class="n">20,6% (7/34)</td><td class="n">32,8% (20/61)</td><td class="n">-12,2</td><td class="n">18,0</td><td>não</td></tr><tr><td>Azure</td><td class="n">8,8% (3/34)</td><td class="n">23,0% (14/61)</td><td class="n">-14,1</td><td class="n">14,2</td><td>não</td></tr><tr><td>SQL</td><td class="n">67,6% (23/34)</td><td class="n">82,0% (50/61)</td><td class="n">-14,3</td><td class="n">18,5</td><td>não</td></tr><tr><td>Terraform/IaC</td><td class="n">5,9% (2/34)</td><td class="n">24,6% (15/61)</td><td class="n">-18,7</td><td class="n">13,4</td><td>sim</td></tr><tr><td>Airflow</td><td class="n">20,6% (7/34)</td><td class="n">39,3% (24/61)</td><td class="n">-18,8</td><td class="n">18,3</td><td>sim</td></tr><tr><td>Spark</td><td class="n">14,7% (5/34)</td><td class="n">36,1% (22/61)</td><td class="n">-21,4</td><td class="n">16,9</td><td>sim</td></tr><tr><td>Python</td><td class="n">64,7% (22/34)</td><td class="n">86,9% (53/61)</td><td class="n">-22,2</td><td class="n">18,2</td><td>sim</td></tr><tr><td>CI/CD</td><td class="n">11,8% (4/34)</td><td class="n">36,1% (22/61)</td><td class="n">-24,3</td><td class="n">16,2</td><td>sim</td></tr></tbody></table></div></details>
+  </section>
+
+  <section class="cartao" id="bi">
+    <h2>Power BI, Looker ou Tableau?</h2>
+    <p class="explica">Percentual das vagas de dados que citam cada ferramenta de BI.</p>
+    <div class="grafico" style="height: 220px"><canvas id="graf-bi" role="img" aria-label="Barras horizontais: percentual das vagas de dados que citam cada ferramenta de BI. Os valores estão na tabela abaixo."></canvas></div>
+    <details><summary>Ver tabela</summary><div class="rolagem"><table><thead><tr><th>Ferramenta</th><th class="n">Vagas</th><th class="n">% das vagas de dados</th><th class="n">Vagas de entrada</th></tr></thead><tbody><tr><td>Power BI</td><td class="n">20</td><td class="n">21,1%</td><td class="n">10</td></tr><tr><td>Tableau</td><td class="n">16</td><td class="n">16,8%</td><td class="n">8</td></tr><tr><td>Looker</td><td class="n">15</td><td class="n">15,8%</td><td class="n">9</td></tr><tr><td>Excel/planilhas</td><td class="n">14</td><td class="n">14,7%</td><td class="n">8</td></tr><tr><td>Metabase</td><td class="n">2</td><td class="n">2,1%</td><td class="n">0</td></tr><tr><td>Qlik</td><td class="n">1</td><td class="n">1,1%</td><td class="n">1</td></tr></tbody></table></div></details>
+    <div class="sempre"><p class="explica" style="margin: 16px 0 0">Quantas vagas pedem só uma das três:</p><div class="rolagem"><table><thead><tr><th>Combinação</th><th class="n">Vagas</th><th class="n">% das vagas de dados</th></tr></thead><tbody><tr><td>só Power BI</td><td class="n">10</td><td class="n">10,5%</td></tr><tr><td>só Looker</td><td class="n">2</td><td class="n">2,1%</td></tr><tr><td>só Tableau</td><td class="n">3</td><td class="n">3,2%</td></tr><tr><td>duas ou mais</td><td class="n">14</td><td class="n">14,7%</td></tr><tr><td>nenhuma das três</td><td class="n">66</td><td class="n">69,5%</td></tr></tbody></table></div></div>
+  </section>
+
+  <section class="cartao" id="modalidade">
+    <h2>Remoto, híbrido ou presencial</h2>
+    <p class="explica">Modalidade informada pela fonte, pelo local ou pela descrição da vaga. A parte cinza são vagas que não dizem a modalidade.</p>
+    <ul class="legenda" aria-hidden="true"><li><i style="background: var(--serie-1)"></i>Remoto</li><li><i style="background: var(--serie-2)"></i>Híbrido</li><li><i style="background: var(--serie-3)"></i>Presencial</li><li><i style="background: var(--neutro)"></i>Não informada</li></ul>
+    <div class="grafico" style="height: 170px"><canvas id="graf-modalidade" role="img" aria-label="Barras empilhadas de 100%: divisão entre remoto, híbrido, presencial e não informada. Os valores estão na tabela abaixo."></canvas></div>
+    <details><summary>Ver tabela</summary><div class="rolagem"><table><thead><tr><th>Recorte</th><th>Modalidade</th><th class="n">Vagas</th><th class="n">% do recorte</th><th class="n">% das que informam</th></tr></thead><tbody><tr><td>Dados</td><td>remoto</td><td class="n">50</td><td class="n">52,6%</td><td class="n">79,4%</td></tr><tr><td>Dados</td><td>híbrido</td><td class="n">8</td><td class="n">8,4%</td><td class="n">12,7%</td></tr><tr><td>Dados</td><td>presencial</td><td class="n">5</td><td class="n">5,3%</td><td class="n">7,9%</td></tr><tr><td>Dados</td><td>não informada</td><td class="n">32</td><td class="n">33,7%</td><td class="n">—</td></tr><tr><td>Dados e TI</td><td>remoto</td><td class="n">181</td><td class="n">41,5%</td><td class="n">64,2%</td></tr><tr><td>Dados e TI</td><td>híbrido</td><td class="n">49</td><td class="n">11,2%</td><td class="n">17,4%</td></tr><tr><td>Dados e TI</td><td>presencial</td><td class="n">52</td><td class="n">11,9%</td><td class="n">18,4%</td></tr><tr><td>Dados e TI</td><td>não informada</td><td class="n">154</td><td class="n">35,3%</td><td class="n">—</td></tr><tr><td>Todas as vagas</td><td>remoto</td><td class="n">394</td><td class="n">26,2%</td><td class="n">36,8%</td></tr><tr><td>Todas as vagas</td><td>híbrido</td><td class="n">152</td><td class="n">10,1%</td><td class="n">14,2%</td></tr><tr><td>Todas as vagas</td><td>presencial</td><td class="n">526</td><td class="n">35,0%</td><td class="n">49,1%</td></tr><tr><td>Todas as vagas</td><td>não informada</td><td class="n">433</td><td class="n">28,8%</td><td class="n">—</td></tr></tbody></table></div></details>
+  </section>
+
+  <section class="cartao" id="pares">
+    <h2>Skills que andam juntas</h2>
+    <p class="explica">Pares de skills citados na mesma vaga de dados.</p>
+    <div class="sempre rolagem"><table><thead><tr><th>Skill</th><th>Junto com</th><th class="n">Vagas</th><th class="n">% das vagas de dados</th></tr></thead><tbody><tr><td>Python</td><td>SQL</td><td class="n">63</td><td class="n">66,3%</td></tr><tr><td>ETL/pipelines de dados</td><td>SQL</td><td class="n">41</td><td class="n">43,2%</td></tr><tr><td>ETL/pipelines de dados</td><td>Python</td><td class="n">40</td><td class="n">42,1%</td></tr><tr><td>Airflow</td><td>SQL</td><td class="n">30</td><td class="n">31,6%</td></tr><tr><td>AWS</td><td>Python</td><td class="n">29</td><td class="n">30,5%</td></tr><tr><td>Airflow</td><td>Python</td><td class="n">29</td><td class="n">30,5%</td></tr><tr><td>Databricks</td><td>SQL</td><td class="n">28</td><td class="n">29,5%</td></tr><tr><td>AWS</td><td>SQL</td><td class="n">27</td><td class="n">28,4%</td></tr><tr><td>Python</td><td>Spark</td><td class="n">27</td><td class="n">28,4%</td></tr><tr><td>Databricks</td><td>Python</td><td class="n">26</td><td class="n">27,4%</td></tr><tr><td>SQL</td><td>Spark</td><td class="n">26</td><td class="n">27,4%</td></tr><tr><td>Machine Learning</td><td>Python</td><td class="n">25</td><td class="n">26,3%</td></tr><tr><td>AWS</td><td>ETL/pipelines de dados</td><td class="n">24</td><td class="n">25,3%</td></tr><tr><td>Data Warehouse/Lake</td><td>SQL</td><td class="n">24</td><td class="n">25,3%</td></tr><tr><td>Databricks</td><td>ETL/pipelines de dados</td><td class="n">24</td><td class="n">25,3%</td></tr></tbody></table></div>
+  </section>
+
+  <section class="cartao" id="empresas">
+    <h2>Empresas que mais publicam vagas de dados</h2>
+    <p class="explica">Só entre as 31 empresas acompanhadas. Não é um ranking do mercado.</p>
+    <ul class="legenda" aria-hidden="true"><li><i style="background: var(--serie-1)"></i>Estágio, júnior ou sem nível</li><li><i style="background: var(--serie-2)"></i>Pleno, sênior ou liderança</li></ul>
+    <div class="grafico" style="height: 430px"><canvas id="graf-empresas" role="img" aria-label="Barras empilhadas: vagas de dados por empresa, divididas por nível. Os valores estão na tabela abaixo."></canvas></div>
+    <details><summary>Ver tabela</summary><div class="rolagem"><table><thead><tr><th>Empresa</th><th>Fonte</th><th class="n">Vagas de dados</th><th class="n">Entrada ou sem nível</th><th class="n">Vagas de TI</th><th class="n">Todas as vagas</th></tr></thead><tbody><tr><td>CI&amp;T</td><td>lever</td><td class="n">23</td><td class="n">6</td><td class="n">63</td><td class="n">96</td></tr><tr><td>BTG Pactual</td><td>greenhouse</td><td class="n">11</td><td class="n">8</td><td class="n">98</td><td class="n">232</td></tr><tr><td>Inter</td><td>greenhouse</td><td class="n">9</td><td class="n">0</td><td class="n">49</td><td class="n">108</td></tr><tr><td>QuintoAndar</td><td>greenhouse</td><td class="n">9</td><td class="n">0</td><td class="n">15</td><td class="n">77</td></tr><tr><td>Brex</td><td>greenhouse</td><td class="n">6</td><td class="n">2</td><td class="n">20</td><td class="n">80</td></tr><tr><td>C6 Bank</td><td>greenhouse</td><td class="n">6</td><td class="n">1</td><td class="n">20</td><td class="n">153</td></tr><tr><td>Power Digital Marketing</td><td>greenhouse</td><td class="n">5</td><td class="n">5</td><td class="n">1</td><td class="n">90</td></tr><tr><td>XP Inc.</td><td>greenhouse</td><td class="n">5</td><td class="n">3</td><td class="n">8</td><td class="n">101</td></tr><tr><td>Wildlife Studios</td><td>greenhouse</td><td class="n">4</td><td class="n">3</td><td class="n">2</td><td class="n">15</td></tr><tr><td>Wellhub (Gympass)</td><td>greenhouse</td><td class="n">3</td><td class="n">1</td><td class="n">13</td><td class="n">38</td></tr><tr><td>EBANX</td><td>greenhouse</td><td class="n">2</td><td class="n">0</td><td class="n">6</td><td class="n">20</td></tr><tr><td>Jusbrasil</td><td>greenhouse</td><td class="n">2</td><td class="n">0</td><td class="n">0</td><td class="n">7</td></tr><tr><td>Stone</td><td>greenhouse</td><td class="n">2</td><td class="n">0</td><td class="n">3</td><td class="n">326</td></tr><tr><td>Turing</td><td>greenhouse</td><td class="n">2</td><td class="n">2</td><td class="n">2</td><td class="n">6</td></tr><tr><td>VTEX</td><td>greenhouse</td><td class="n">2</td><td class="n">2</td><td class="n">9</td><td class="n">17</td></tr></tbody></table></div></details>
+  </section>
+
+  <section class="cartao" id="idade">
+    <h2>Há quanto tempo as vagas estão abertas</h2>
+    <p class="explica">Dias entre a publicação e a coleta, nas vagas de dados abertas. Vaga antiga e ainda aberta pode ser difícil de preencher ou ter sido esquecida no ar.</p>
+    <div class="grafico" style="height: 220px"><canvas id="graf-idade" role="img" aria-label="Colunas: vagas de dados por faixa de dias desde a publicação. Os valores estão na tabela abaixo."></canvas></div>
+    <details><summary>Ver tabela</summary><div class="rolagem"><table><thead><tr><th>Desde a publicação</th><th class="n">Vagas</th><th class="n">% das vagas de dados</th></tr></thead><tbody><tr><td>até 7 dias</td><td class="n">9</td><td class="n">9,5%</td></tr><tr><td>8 a 30 dias</td><td class="n">25</td><td class="n">26,3%</td></tr><tr><td>31 a 90 dias</td><td class="n">33</td><td class="n">34,7%</td></tr><tr><td>mais de 90 dias</td><td class="n">28</td><td class="n">29,5%</td></tr></tbody></table></div></details>
+  </section>
+
+  <section class="cartao" id="evolucao">
+    <h2>Evolução semana a semana</h2>
+    <p class="explica">Vagas de dados vistas em cada semana com coleta. A série cresce a cada execução semanal.</p>
+    <p class="aviso">Ainda há uma semana de coleta só. O gráfico aparece a partir da segunda semana; até lá, os números estão na tabela.</p>
+    <div class="grafico" style="height: 240px"><canvas id="graf-evolucao" role="img" aria-label="Linha: vagas de dados vistas por semana. Os valores estão na tabela abaixo."></canvas></div>
+    <details><summary>Ver tabela</summary><div class="rolagem"><table><thead><tr><th>Semana (segunda-feira)</th><th class="n">Dados: vistas</th><th class="n">Dados: novas</th><th class="n">Dados: encerradas</th><th class="n">Todas: vistas</th><th class="n">Todas: novas</th><th class="n">Todas: encerradas</th></tr></thead><tbody><tr><td>09/11/2026</td><td class="n">98</td><td class="n">98</td><td class="n">3</td><td class="n">1.508</td><td class="n">1.508</td><td class="n">3</td></tr></tbody></table></div></details>
+  </section>
+
+  <section class="cartao" id="entrada">
+    <h2>Vagas abertas de estágio e júnior</h2>
+    <p class="explica">Vagas de dados e TI que dizem estágio ou júnior no título, na data da coleta. Confira na página da empresa se a vaga ainda está aberta.</p>
+    <div class="sempre rolagem"><table><thead><tr><th>Área</th><th>Nível</th><th>Empresa</th><th>Vaga</th><th>Modalidade</th><th>Publicada</th></tr></thead><tbody><tr><td>dados</td><td>estágio</td><td>VTEX</td><td><a href="https://job-boards.greenhouse.io/vtex/jobs/6241809004" rel="noopener">Estágio em Ciência de Dados</a></td><td>não informada</td><td>06/11/2026</td></tr><tr><td>TI</td><td>estágio</td><td>BTG Pactual</td><td><a href="https://carreiras.btgpactual.com/vagas?gh_jid=6133390004" rel="noopener">Estágio Short Job | Automation - Development</a></td><td>remoto</td><td>03/08/2026</td></tr><tr><td>TI</td><td>estágio</td><td>BTG Pactual</td><td><a href="https://carreiras.btgpactual.com/vagas?gh_jid=6188507004" rel="noopener">Estágio Short Job | Automation - Development (1 semestre de 2027)</a></td><td>não informada</td><td>10/09/2026</td></tr><tr><td>TI</td><td>estágio</td><td>BTG Pactual</td><td><a href="https://carreiras.btgpactual.com/vagas?gh_jid=6133602004" rel="noopener">Estágio Short Job | Automation - Discovery</a></td><td>híbrido</td><td>03/08/2026</td></tr><tr><td>TI</td><td>estágio</td><td>BTG Pactual</td><td><a href="https://carreiras.btgpactual.com/vagas?gh_jid=6188501004" rel="noopener">Estágio Short Job | Automation - Discovery (1 semestre de 2027)</a></td><td>presencial</td><td>10/09/2026</td></tr><tr><td>TI</td><td>estágio</td><td>Brex</td><td><a href="https://www.brex.com/careers/8935242002?gh_jid=8935242002" rel="noopener">Software Engineer, Internship - 2027</a></td><td>não informada</td><td>09/11/2026</td></tr><tr><td>TI</td><td>júnior</td><td>BTG Pactual</td><td><a href="https://carreiras.btgpactual.com/vagas?gh_jid=6143439004" rel="noopener">Engenheiro de Software Junior (Java) | Digital Equities</a></td><td>remoto</td><td>13/08/2026</td></tr><tr><td>TI</td><td>júnior</td><td>BTG Pactual</td><td><a href="https://carreiras.btgpactual.com/vagas?gh_jid=5691138004" rel="noopener">Engenheiro(a) de Software Junior(Full stack) | IT Accounting Clients &amp; Finance Report</a></td><td>híbrido</td><td>28/10/2025</td></tr><tr><td>TI</td><td>júnior</td><td>Inter</td><td><a href="https://boards.greenhouse.io/inter/jobs/4744451005?gh_jid=4744451005" rel="noopener">CYBER SECURITY ANALYST I | APPSEC</a></td><td>não informada</td><td>20/10/2026</td></tr><tr><td>TI</td><td>júnior</td><td>Inter</td><td><a href="https://boards.greenhouse.io/inter/jobs/4749552005?gh_jid=4749552005" rel="noopener">TECH ASSISTANT CX</a></td><td>não informada</td><td>10/11/2026</td></tr><tr><td>TI</td><td>júnior</td><td>Inter</td><td><a href="https://boards.greenhouse.io/inter/jobs/4744113005?gh_jid=4744113005" rel="noopener">TECH OPS ANALYST I - QA TESTER | PE CROSS</a></td><td>não informada</td><td>11/11/2026</td></tr><tr><td>TI</td><td>júnior</td><td>Neon</td><td><a href="https://jobs.lever.co/neon/6a8a25c3-5e0c-4761-a066-57db5c0e5948" rel="noopener">Analista de Suporte Júnior | Afirmativa para PCD&#x27;s</a></td><td>presencial</td><td>10/11/2026</td></tr><tr><td>TI</td><td>júnior</td><td>Wildlife Studios</td><td><a href="https://job-boards.greenhouse.io/wildlifestudios/jobs/8864949002" rel="noopener">Junior IT Support Analyst</a></td><td>não informada</td><td>02/10/2026</td></tr><tr><td>TI</td><td>júnior</td><td>XP Inc.</td><td><a href="https://job-boards.greenhouse.io/xpinc/jobs/8147533002" rel="noopener">Engenheiro(a) de Software - Assistente e Júnior | Vaga exclusiva para Pessoa com Deficiência</a></td><td>presencial</td><td>03/10/2025</td></tr></tbody></table></div>
+  </section>
+
+  <footer>
+    <h2>Como ler estes números</h2>
+    <ul>
+      <li>Fontes: APIs públicas de vagas do Greenhouse, da Lever e da Ashby, só para as 31 empresas da lista do projeto, com vaga no Brasil ou na América Latina. Não representa o mercado inteiro: Gupy e LinkedIn ficaram de fora (veja <code>docs/FONTES.md</code>).</li>
+      <li>Área e nível saem de regras sobre o título da vaga. Skills saem de um dicionário de sinônimos (versão 2). Ambos erram: veja os indicadores abaixo.</li>
+      <li>O texto das descrições não é guardado. O banco tem só metadados, as skills encontradas, um hash do texto e o link.</li>
+    </ul>
+    <div class="rolagem"><table><thead><tr><th>Indicador</th><th class="n">Vagas</th><th class="n">% das vagas de dados</th></tr></thead><tbody><tr><td>vagas de dados sem nenhuma skill reconhecida</td><td class="n">1</td><td class="n">1,1%</td></tr><tr><td>vagas de dados sem nível no título</td><td class="n">33</td><td class="n">34,7%</td></tr><tr><td>vagas de dados com modalidade lida na descrição</td><td class="n">23</td><td class="n">24,2%</td></tr><tr><td>vagas de dados sem modalidade</td><td class="n">32</td><td class="n">33,7%</td></tr></tbody></table></div>
+    <p>Coleta de 12/11/2026. Página gerada por <code>python scripts/relatorio.py</code> a partir de <code>sql/analises.sql</code>. Código e método: <a href="https://github.com/Balchuna/radar-vagas-dados">github.com/Balchuna/radar-vagas-dados</a>.</p>
+  </footer>
+</div>
+
+<script id="dados" type="application/json">{"panorama":[{"ultima_coleta":"2026-11-12T19:31:29+00:00","primeira_coleta":"2026-11-12T18:55:44+00:00","execucoes":7,"dias_com_coleta":1,"empresas_consultadas":31,"empresas_ok":31,"empresas_com_vaga":30,"vagas_ativas":1505,"vagas_ti":341,"vagas_dados":95,"vagas_dados_acessiveis":34,"vagas_dados_junior_estagio":1,"vagas_dados_ti_junior_estagio":14,"publicacao_mais_antiga":"2022-01-12","publicacao_mais_recente":"2026-11-12","versao_dicionario_skills":2}],"area_por_nivel":[{"area":"dados","estagio":1,"junior":0,"pleno":10,"senior":47,"lideranca":4,"nao_informada":33,"total":95},{"area":"ti","estagio":5,"junior":8,"pleno":21,"senior":184,"lideranca":33,"nao_informada":90,"total":341},{"area":"outras","estagio":20,"junior":42,"pleno":40,"senior":215,"lideranca":116,"nao_informada":636,"total":1069}],"top_skills_dados":[{"skill":"Python","categoria":"linguagem","vagas":75,"pct":78.9},{"skill":"SQL","categoria":"linguagem","vagas":73,"pct":76.8},{"skill":"ETL/pipelines de dados","categoria":"engenharia_dados","vagas":44,"pct":46.3},{"skill":"AWS","categoria":"nuvem","vagas":33,"pct":34.7},{"skill":"Airflow","categoria":"engenharia_dados","vagas":31,"pct":32.6},{"skill":"Databricks","categoria":"banco","vagas":30,"pct":31.6},{"skill":"Estatística","categoria":"analise","vagas":28,"pct":29.5},{"skill":"Inglês","categoria":"idioma","vagas":27,"pct":28.4},{"skill":"Machine Learning","categoria":"ia","vagas":27,"pct":28.4},{"skill":"Spark","categoria":"engenharia_dados","vagas":27,"pct":28.4},{"skill":"CI/CD","categoria":"infra","vagas":26,"pct":27.4},{"skill":"Git","categoria":"infra","vagas":26,"pct":27.4},{"skill":"Data Warehouse/Lake","categoria":"engenharia_dados","vagas":25,"pct":26.3},{"skill":"IA generativa / LLM","categoria":"ia","vagas":25,"pct":26.3},{"skill":"Modelagem de dados","categoria":"engenharia_dados","vagas":24,"pct":25.3},{"skill":"Power BI","categoria":"bi","vagas":20,"pct":21.1},{"skill":"dbt","categoria":"engenharia_dados","vagas":18,"pct":18.9},{"skill":"Azure","categoria":"nuvem","vagas":17,"pct":17.9},{"skill":"Terraform/IaC","categoria":"infra","vagas":17,"pct":17.9},{"skill":"GCP","categoria":"nuvem","vagas":16,"pct":16.8}],"top_skills_dados_acessiveis":[{"skill":"SQL","categoria":"linguagem","vagas":23,"pct":67.6},{"skill":"Python","categoria":"linguagem","vagas":22,"pct":64.7},{"skill":"ETL/pipelines de dados","categoria":"engenharia_dados","vagas":15,"pct":44.1},{"skill":"Estatística","categoria":"analise","vagas":14,"pct":41.2},{"skill":"AWS","categoria":"nuvem","vagas":12,"pct":35.3},{"skill":"Inglês","categoria":"idioma","vagas":10,"pct":29.4},{"skill":"Power BI","categoria":"bi","vagas":10,"pct":29.4},{"skill":"Databricks","categoria":"banco","vagas":9,"pct":26.5},{"skill":"Looker","categoria":"bi","vagas":9,"pct":26.5},{"skill":"Excel/planilhas","categoria":"bi","vagas":8,"pct":23.5},{"skill":"Git","categoria":"infra","vagas":8,"pct":23.5},{"skill":"Tableau","categoria":"bi","vagas":8,"pct":23.5},{"skill":"Airflow","categoria":"engenharia_dados","vagas":7,"pct":20.6},{"skill":"Data Warehouse/Lake","categoria":"engenharia_dados","vagas":7,"pct":20.6},{"skill":"IA generativa / LLM","categoria":"ia","vagas":7,"pct":20.6}],"skills_por_nivel_dados":[{"skill":"Estatística","vagas_dados":28,"vagas_acessiveis":14,"total_acessiveis":34,"pct_acessiveis":41.2,"vagas_pleno_ou_acima":14,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":23.0,"diferenca_pp":18.2,"margem_95_pp":19.6,"diferenca_clara":false},{"skill":"Looker","vagas_dados":15,"vagas_acessiveis":9,"total_acessiveis":34,"pct_acessiveis":26.5,"vagas_pleno_ou_acima":6,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":9.8,"diferenca_pp":16.6,"margem_95_pp":16.6,"diferenca_clara":false},{"skill":"Excel/planilhas","vagas_dados":14,"vagas_acessiveis":8,"total_acessiveis":34,"pct_acessiveis":23.5,"vagas_pleno_ou_acima":6,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":9.8,"diferenca_pp":13.7,"margem_95_pp":16.1,"diferenca_clara":false},{"skill":"Power BI","vagas_dados":20,"vagas_acessiveis":10,"total_acessiveis":34,"pct_acessiveis":29.4,"vagas_pleno_ou_acima":10,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":16.4,"diferenca_pp":13.0,"margem_95_pp":17.9,"diferenca_clara":false},{"skill":"Tableau","vagas_dados":16,"vagas_acessiveis":8,"total_acessiveis":34,"pct_acessiveis":23.5,"vagas_pleno_ou_acima":8,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":13.1,"diferenca_pp":10.4,"margem_95_pp":16.6,"diferenca_clara":false},{"skill":"Snowflake","vagas_dados":13,"vagas_acessiveis":5,"total_acessiveis":34,"pct_acessiveis":14.7,"vagas_pleno_ou_acima":8,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":13.1,"diferenca_pp":1.6,"margem_95_pp":14.6,"diferenca_clara":false},{"skill":"Inglês","vagas_dados":27,"vagas_acessiveis":10,"total_acessiveis":34,"pct_acessiveis":29.4,"vagas_pleno_ou_acima":17,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":27.9,"diferenca_pp":1.5,"margem_95_pp":19.0,"diferenca_clara":false},{"skill":"AWS","vagas_dados":33,"vagas_acessiveis":12,"total_acessiveis":34,"pct_acessiveis":35.3,"vagas_pleno_ou_acima":21,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":34.4,"diferenca_pp":0.9,"margem_95_pp":20.0,"diferenca_clara":false},{"skill":"dbt","vagas_dados":18,"vagas_acessiveis":6,"total_acessiveis":34,"pct_acessiveis":17.6,"vagas_pleno_ou_acima":12,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":19.7,"diferenca_pp":-2.0,"margem_95_pp":16.2,"diferenca_clara":false},{"skill":"ETL/pipelines de dados","vagas_dados":44,"vagas_acessiveis":15,"total_acessiveis":34,"pct_acessiveis":44.1,"vagas_pleno_ou_acima":29,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":47.5,"diferenca_pp":-3.4,"margem_95_pp":20.9,"diferenca_clara":false},{"skill":"Git","vagas_dados":26,"vagas_acessiveis":8,"total_acessiveis":34,"pct_acessiveis":23.5,"vagas_pleno_ou_acima":18,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":29.5,"diferenca_pp":-6.0,"margem_95_pp":18.3,"diferenca_clara":false},{"skill":"Modelagem de dados","vagas_dados":24,"vagas_acessiveis":7,"total_acessiveis":34,"pct_acessiveis":20.6,"vagas_pleno_ou_acima":17,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":27.9,"diferenca_pp":-7.3,"margem_95_pp":17.6,"diferenca_clara":false},{"skill":"GCP","vagas_dados":16,"vagas_acessiveis":4,"total_acessiveis":34,"pct_acessiveis":11.8,"vagas_pleno_ou_acima":12,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":19.7,"diferenca_pp":-7.9,"margem_95_pp":14.7,"diferenca_clara":false},{"skill":"Databricks","vagas_dados":30,"vagas_acessiveis":9,"total_acessiveis":34,"pct_acessiveis":26.5,"vagas_pleno_ou_acima":21,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":34.4,"diferenca_pp":-8.0,"margem_95_pp":19.0,"diferenca_clara":false},{"skill":"BigQuery","vagas_dados":11,"vagas_acessiveis":2,"total_acessiveis":34,"pct_acessiveis":5.9,"vagas_pleno_ou_acima":9,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":14.8,"diferenca_pp":-8.9,"margem_95_pp":11.9,"diferenca_clara":false},{"skill":"Data Warehouse/Lake","vagas_dados":25,"vagas_acessiveis":7,"total_acessiveis":34,"pct_acessiveis":20.6,"vagas_pleno_ou_acima":18,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":29.5,"diferenca_pp":-8.9,"margem_95_pp":17.8,"diferenca_clara":false},{"skill":"IA generativa / LLM","vagas_dados":25,"vagas_acessiveis":7,"total_acessiveis":34,"pct_acessiveis":20.6,"vagas_pleno_ou_acima":18,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":29.5,"diferenca_pp":-8.9,"margem_95_pp":17.8,"diferenca_clara":false},{"skill":"Machine Learning","vagas_dados":27,"vagas_acessiveis":7,"total_acessiveis":34,"pct_acessiveis":20.6,"vagas_pleno_ou_acima":20,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":32.8,"diferenca_pp":-12.2,"margem_95_pp":18.0,"diferenca_clara":false},{"skill":"Azure","vagas_dados":17,"vagas_acessiveis":3,"total_acessiveis":34,"pct_acessiveis":8.8,"vagas_pleno_ou_acima":14,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":23.0,"diferenca_pp":-14.1,"margem_95_pp":14.2,"diferenca_clara":false},{"skill":"SQL","vagas_dados":73,"vagas_acessiveis":23,"total_acessiveis":34,"pct_acessiveis":67.6,"vagas_pleno_ou_acima":50,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":82.0,"diferenca_pp":-14.3,"margem_95_pp":18.5,"diferenca_clara":false},{"skill":"Terraform/IaC","vagas_dados":17,"vagas_acessiveis":2,"total_acessiveis":34,"pct_acessiveis":5.9,"vagas_pleno_ou_acima":15,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":24.6,"diferenca_pp":-18.7,"margem_95_pp":13.4,"diferenca_clara":true},{"skill":"Airflow","vagas_dados":31,"vagas_acessiveis":7,"total_acessiveis":34,"pct_acessiveis":20.6,"vagas_pleno_ou_acima":24,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":39.3,"diferenca_pp":-18.8,"margem_95_pp":18.3,"diferenca_clara":true},{"skill":"Spark","vagas_dados":27,"vagas_acessiveis":5,"total_acessiveis":34,"pct_acessiveis":14.7,"vagas_pleno_ou_acima":22,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":36.1,"diferenca_pp":-21.4,"margem_95_pp":16.9,"diferenca_clara":true},{"skill":"Python","vagas_dados":75,"vagas_acessiveis":22,"total_acessiveis":34,"pct_acessiveis":64.7,"vagas_pleno_ou_acima":53,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":86.9,"diferenca_pp":-22.2,"margem_95_pp":18.2,"diferenca_clara":true},{"skill":"CI/CD","vagas_dados":26,"vagas_acessiveis":4,"total_acessiveis":34,"pct_acessiveis":11.8,"vagas_pleno_ou_acima":22,"total_pleno_ou_acima":61,"pct_pleno_ou_acima":36.1,"diferenca_pp":-24.3,"margem_95_pp":16.2,"diferenca_clara":true}],"categorias_dados":[{"categoria":"linguagem","vagas":85,"pct":89.5},{"categoria":"engenharia_dados","vagas":59,"pct":62.1},{"categoria":"nuvem","vagas":47,"pct":49.5},{"categoria":"banco","vagas":45,"pct":47.4},{"categoria":"infra","vagas":42,"pct":44.2},{"categoria":"ia","vagas":39,"pct":41.1},{"categoria":"bi","vagas":35,"pct":36.8},{"categoria":"analise","vagas":31,"pct":32.6},{"categoria":"idioma","vagas":27,"pct":28.4},{"categoria":"gestao","vagas":10,"pct":10.5},{"categoria":"integracao","vagas":4,"pct":4.2},{"categoria":"automacao","vagas":1,"pct":1.1}],"pares_skills_dados":[{"skill_1":"Python","skill_2":"SQL","vagas":63,"pct":66.3},{"skill_1":"ETL/pipelines de dados","skill_2":"SQL","vagas":41,"pct":43.2},{"skill_1":"ETL/pipelines de dados","skill_2":"Python","vagas":40,"pct":42.1},{"skill_1":"Airflow","skill_2":"SQL","vagas":30,"pct":31.6},{"skill_1":"AWS","skill_2":"Python","vagas":29,"pct":30.5},{"skill_1":"Airflow","skill_2":"Python","vagas":29,"pct":30.5},{"skill_1":"Databricks","skill_2":"SQL","vagas":28,"pct":29.5},{"skill_1":"AWS","skill_2":"SQL","vagas":27,"pct":28.4},{"skill_1":"Python","skill_2":"Spark","vagas":27,"pct":28.4},{"skill_1":"Databricks","skill_2":"Python","vagas":26,"pct":27.4},{"skill_1":"SQL","skill_2":"Spark","vagas":26,"pct":27.4},{"skill_1":"Machine Learning","skill_2":"Python","vagas":25,"pct":26.3},{"skill_1":"AWS","skill_2":"ETL/pipelines de dados","vagas":24,"pct":25.3},{"skill_1":"Data Warehouse/Lake","skill_2":"SQL","vagas":24,"pct":25.3},{"skill_1":"Databricks","skill_2":"ETL/pipelines de dados","vagas":24,"pct":25.3}],"modalidade":[{"recorte":"dados","modalidade":"remoto","vagas":50,"pct_do_recorte":52.6,"pct_das_informadas":79.4},{"recorte":"dados","modalidade":"hibrido","vagas":8,"pct_do_recorte":8.4,"pct_das_informadas":12.7},{"recorte":"dados","modalidade":"presencial","vagas":5,"pct_do_recorte":5.3,"pct_das_informadas":7.9},{"recorte":"dados","modalidade":"nao_informada","vagas":32,"pct_do_recorte":33.7,"pct_das_informadas":null},{"recorte":"dados_e_ti","modalidade":"remoto","vagas":181,"pct_do_recorte":41.5,"pct_das_informadas":64.2},{"recorte":"dados_e_ti","modalidade":"hibrido","vagas":49,"pct_do_recorte":11.2,"pct_das_informadas":17.4},{"recorte":"dados_e_ti","modalidade":"presencial","vagas":52,"pct_do_recorte":11.9,"pct_das_informadas":18.4},{"recorte":"dados_e_ti","modalidade":"nao_informada","vagas":154,"pct_do_recorte":35.3,"pct_das_informadas":null},{"recorte":"todas","modalidade":"remoto","vagas":394,"pct_do_recorte":26.2,"pct_das_informadas":36.8},{"recorte":"todas","modalidade":"hibrido","vagas":152,"pct_do_recorte":10.1,"pct_das_informadas":14.2},{"recorte":"todas","modalidade":"presencial","vagas":526,"pct_do_recorte":35.0,"pct_das_informadas":49.1},{"recorte":"todas","modalidade":"nao_informada","vagas":433,"pct_do_recorte":28.8,"pct_das_informadas":null}],"ferramentas_bi":[{"skill":"Power BI","vagas":20,"pct":21.1,"vagas_acessiveis":10},{"skill":"Tableau","vagas":16,"pct":16.8,"vagas_acessiveis":8},{"skill":"Looker","vagas":15,"pct":15.8,"vagas_acessiveis":9},{"skill":"Excel/planilhas","vagas":14,"pct":14.7,"vagas_acessiveis":8},{"skill":"Metabase","vagas":2,"pct":2.1,"vagas_acessiveis":0},{"skill":"Qlik","vagas":1,"pct":1.1,"vagas_acessiveis":1}],"bi_combinacoes":[{"combinacao":"só Power BI","vagas":10,"pct":10.5},{"combinacao":"só Looker","vagas":2,"pct":2.1},{"combinacao":"só Tableau","vagas":3,"pct":3.2},{"combinacao":"duas ou mais","vagas":14,"pct":14.7},{"combinacao":"nenhuma das três","vagas":66,"pct":69.5}],"evolucao_semanal":[{"semana":"2026-11-09","dados_vistas":98,"dados_novas":98,"dados_encerradas":3,"todas_vistas":1508,"todas_novas":1508,"todas_encerradas":3}],"idade_vagas_dados":[{"faixa":"até 7 dias","vagas":9,"pct":9.5},{"faixa":"8 a 30 dias","vagas":25,"pct":26.3},{"faixa":"31 a 90 dias","vagas":33,"pct":34.7},{"faixa":"mais de 90 dias","vagas":28,"pct":29.5}],"empresas_dados":[{"empresa":"CI&T","fonte":"lever","vagas_dados":23,"dados_acessiveis":6,"vagas_ti":63,"vagas_total":96},{"empresa":"BTG Pactual","fonte":"greenhouse","vagas_dados":11,"dados_acessiveis":8,"vagas_ti":98,"vagas_total":232},{"empresa":"Inter","fonte":"greenhouse","vagas_dados":9,"dados_acessiveis":0,"vagas_ti":49,"vagas_total":108},{"empresa":"QuintoAndar","fonte":"greenhouse","vagas_dados":9,"dados_acessiveis":0,"vagas_ti":15,"vagas_total":77},{"empresa":"Brex","fonte":"greenhouse","vagas_dados":6,"dados_acessiveis":2,"vagas_ti":20,"vagas_total":80},{"empresa":"C6 Bank","fonte":"greenhouse","vagas_dados":6,"dados_acessiveis":1,"vagas_ti":20,"vagas_total":153},{"empresa":"Power Digital Marketing","fonte":"greenhouse","vagas_dados":5,"dados_acessiveis":5,"vagas_ti":1,"vagas_total":90},{"empresa":"XP Inc.","fonte":"greenhouse","vagas_dados":5,"dados_acessiveis":3,"vagas_ti":8,"vagas_total":101},{"empresa":"Wildlife Studios","fonte":"greenhouse","vagas_dados":4,"dados_acessiveis":3,"vagas_ti":2,"vagas_total":15},{"empresa":"Wellhub (Gympass)","fonte":"greenhouse","vagas_dados":3,"dados_acessiveis":1,"vagas_ti":13,"vagas_total":38},{"empresa":"EBANX","fonte":"greenhouse","vagas_dados":2,"dados_acessiveis":0,"vagas_ti":6,"vagas_total":20},{"empresa":"Jusbrasil","fonte":"greenhouse","vagas_dados":2,"dados_acessiveis":0,"vagas_ti":0,"vagas_total":7},{"empresa":"Stone","fonte":"greenhouse","vagas_dados":2,"dados_acessiveis":0,"vagas_ti":3,"vagas_total":326},{"empresa":"Turing","fonte":"greenhouse","vagas_dados":2,"dados_acessiveis":2,"vagas_ti":2,"vagas_total":6},{"empresa":"VTEX","fonte":"greenhouse","vagas_dados":2,"dados_acessiveis":2,"vagas_ti":9,"vagas_total":17}],"vagas_entrada":[{"area":"dados","senioridade":"estagio","empresa":"VTEX","titulo":"Estágio em Ciência de Dados","modalidade":"nao_informada","publicada_em":"2026-11-06","url":"https://job-boards.greenhouse.io/vtex/jobs/6241809004"},{"area":"ti","senioridade":"estagio","empresa":"BTG Pactual","titulo":"Estágio Short Job | Automation - Development","modalidade":"remoto","publicada_em":"2026-08-03","url":"https://carreiras.btgpactual.com/vagas?gh_jid=6133390004"},{"area":"ti","senioridade":"estagio","empresa":"BTG Pactual","titulo":"Estágio Short Job | Automation - Development (1 semestre de 2027)","modalidade":"nao_informada","publicada_em":"2026-09-10","url":"https://carreiras.btgpactual.com/vagas?gh_jid=6188507004"},{"area":"ti","senioridade":"estagio","empresa":"BTG Pactual","titulo":"Estágio Short Job | Automation - Discovery","modalidade":"hibrido","publicada_em":"2026-08-03","url":"https://carreiras.btgpactual.com/vagas?gh_jid=6133602004"},{"area":"ti","senioridade":"estagio","empresa":"BTG Pactual","titulo":"Estágio Short Job | Automation - Discovery (1 semestre de 2027)","modalidade":"presencial","publicada_em":"2026-09-10","url":"https://carreiras.btgpactual.com/vagas?gh_jid=6188501004"},{"area":"ti","senioridade":"estagio","empresa":"Brex","titulo":"Software Engineer, Internship - 2027","modalidade":"nao_informada","publicada_em":"2026-11-09","url":"https://www.brex.com/careers/8935242002?gh_jid=8935242002"},{"area":"ti","senioridade":"junior","empresa":"BTG Pactual","titulo":"Engenheiro de Software Junior (Java) | Digital Equities","modalidade":"remoto","publicada_em":"2026-08-13","url":"https://carreiras.btgpactual.com/vagas?gh_jid=6143439004"},{"area":"ti","senioridade":"junior","empresa":"BTG Pactual","titulo":"Engenheiro(a) de Software Junior(Full stack) | IT Accounting Clients & Finance Report","modalidade":"hibrido","publicada_em":"2025-10-28","url":"https://carreiras.btgpactual.com/vagas?gh_jid=5691138004"},{"area":"ti","senioridade":"junior","empresa":"Inter","titulo":"CYBER SECURITY ANALYST I | APPSEC","modalidade":"nao_informada","publicada_em":"2026-10-20","url":"https://boards.greenhouse.io/inter/jobs/4744451005?gh_jid=4744451005"},{"area":"ti","senioridade":"junior","empresa":"Inter","titulo":"TECH ASSISTANT CX","modalidade":"nao_informada","publicada_em":"2026-11-10","url":"https://boards.greenhouse.io/inter/jobs/4749552005?gh_jid=4749552005"},{"area":"ti","senioridade":"junior","empresa":"Inter","titulo":"TECH OPS ANALYST I - QA TESTER | PE CROSS","modalidade":"nao_informada","publicada_em":"2026-11-11","url":"https://boards.greenhouse.io/inter/jobs/4744113005?gh_jid=4744113005"},{"area":"ti","senioridade":"junior","empresa":"Neon","titulo":"Analista de Suporte Júnior | Afirmativa para PCD's","modalidade":"presencial","publicada_em":"2026-11-10","url":"https://jobs.lever.co/neon/6a8a25c3-5e0c-4761-a066-57db5c0e5948"},{"area":"ti","senioridade":"junior","empresa":"Wildlife Studios","titulo":"Junior IT Support Analyst","modalidade":"nao_informada","publicada_em":"2026-10-02","url":"https://job-boards.greenhouse.io/wildlifestudios/jobs/8864949002"},{"area":"ti","senioridade":"junior","empresa":"XP Inc.","titulo":"Engenheiro(a) de Software - Assistente e Júnior | Vaga exclusiva para Pessoa com Deficiência","modalidade":"presencial","publicada_em":"2025-10-03","url":"https://job-boards.greenhouse.io/xpinc/jobs/8147533002"}],"qualidade":[{"indicador":"vagas de dados sem nenhuma skill reconhecida","vagas":1,"pct":1.1},{"indicador":"vagas de dados sem nível no título","vagas":33,"pct":34.7},{"indicador":"vagas de dados com modalidade lida na descrição","vagas":23,"pct":24.2},{"indicador":"vagas de dados sem modalidade","vagas":32,"pct":33.7}]}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" integrity="sha384-bs/nf9FbdNouRbMiFcrcZfLXYPKiPaGVGplVbv7dLGECccEXDW+S3zjqSKR5ZEaD" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+(function () {
+  "use strict";
+  if (typeof Chart === "undefined") {
+    // Sem a biblioteca (offline ou bloqueada): os números continuam nas tabelas.
+    document.querySelectorAll(".grafico").forEach(function (g) { g.closest("section").classList.add("sem-grafico"); });
+    document.querySelectorAll("section details").forEach(function (d) { d.open = true; });
+    return;
+  }
+  var dados = JSON.parse(document.getElementById("dados").textContent);
+  var num = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 1 });
+  // Percentuais sempre com uma casa (32,0%), como nas tabelas geradas pelo Python.
+  var dec = new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  var graficos = [];
+
+  function cor(nome) { return getComputedStyle(document.documentElement).getPropertyValue(nome).trim(); }
+
+  // Escreve o valor na ponta de cada barra (só em gráficos de uma série).
+  var rotuloNaPonta = {
+    id: "rotuloNaPonta",
+    afterDatasetsDraw: function (chart, args, opcoes) {
+      if (!opcoes || !opcoes.ligado) return;
+      var ctx = chart.ctx;
+      var meta = chart.getDatasetMeta(0);
+      ctx.save();
+      ctx.fillStyle = cor("--texto-2");
+      ctx.font = "13px system-ui, -apple-system, 'Segoe UI', sans-serif";
+      var horizontal = chart.options.indexAxis === "y";
+      ctx.textAlign = horizontal ? "left" : "center";
+      ctx.textBaseline = horizontal ? "middle" : "bottom";
+      meta.data.forEach(function (barra, i) {
+        var valor = chart.data.datasets[0].data[i];
+        if (valor === null || valor === undefined) return;
+        var texto = opcoes.sufixo === "%" ? dec.format(valor) + "%" : num.format(valor) + (opcoes.sufixo || "");
+        if (horizontal) ctx.fillText(texto, barra.x + 6, barra.y);
+        else ctx.fillText(texto, barra.x, barra.y - 4);
+      });
+      ctx.restore();
+    }
+  };
+
+  function base(horizontal, extra) {
+    var grade = cor("--grade");
+    var eixo = cor("--eixo");
+    var texto2 = cor("--texto-2");
+    var o = {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      indexAxis: horizontal ? "y" : "x",
+      layout: { padding: { right: horizontal ? 52 : 8, top: horizontal ? 0 : 20 } },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: cor("--texto"),
+          titleColor: cor("--superficie"),
+          bodyColor: cor("--superficie"),
+          padding: 10,
+          displayColors: true,
+          boxPadding: 4
+        }
+      },
+      scales: {
+        x: { grid: { color: horizontal ? grade : "transparent", drawTicks: false }, border: { color: eixo }, ticks: { color: texto2, padding: 6 } },
+        y: { grid: { color: horizontal ? "transparent" : grade, drawTicks: false }, border: { color: eixo }, ticks: { color: texto2, padding: 6 } }
+      }
+    };
+    return Object.assign(o, extra || {});
+  }
+
+  function barras(id, rotulos, series, opcoes) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var c = new Chart(el, {
+      type: "bar",
+      data: {
+        labels: rotulos,
+        datasets: series.map(function (s) {
+          return {
+            label: s.nome,
+            data: s.valores,
+            backgroundColor: cor(s.cor),
+            borderColor: cor("--superficie"),
+            borderWidth: opcoes.empilhado ? { right: 2, left: 0, top: 0, bottom: 0 } : 0,
+            borderSkipped: opcoes.empilhado ? false : "start",
+            borderRadius: opcoes.empilhado ? 0 : 4,
+            maxBarThickness: opcoes.espessura || 18,
+            categoryPercentage: opcoes.categoria || 0.8,
+            barPercentage: opcoes.barra || 0.9
+          };
+        })
+      },
+      options: opcoes.config,
+      plugins: [rotuloNaPonta]
+    });
+    graficos.push(c);
+  }
+
+  function pct(v) { return v === null || v === undefined ? "—" : dec.format(v) + "%"; }
+
+  function desenhar() {
+    graficos.forEach(function (g) { g.destroy(); });
+    graficos = [];
+    Chart.defaults.font.family = "system-ui, -apple-system, 'Segoe UI', sans-serif";
+    Chart.defaults.font.size = 13;
+    Chart.defaults.color = cor("--texto-2");
+
+    // 1. Top skills
+    var sk = dados.top_skills_dados;
+    var cfg1 = base(true);
+    cfg1.scales.x.ticks.callback = function (v) { return v + "%"; };
+    cfg1.scales.x.suggestedMax = 100;
+    cfg1.plugins.rotuloNaPonta = { ligado: true, sufixo: "%" };
+    cfg1.plugins.tooltip.callbacks = { label: function (c) { var l = sk[c.dataIndex]; return " " + pct(l.pct) + " das vagas de dados (" + l.vagas + ")"; } };
+    barras("graf-skills", sk.map(function (l) { return l.skill; }), [{ nome: "Vagas de dados", valores: sk.map(function (l) { return l.pct; }), cor: "--serie-1" }], { config: cfg1 });
+
+    // 2. Entrada x pleno ou acima
+    var nv = dados.skills_por_nivel_dados;
+    var cfg2 = base(true);
+    cfg2.scales.x.ticks.callback = function (v) { return v + "%"; };
+    cfg2.scales.x.suggestedMax = 100;
+    cfg2.plugins.tooltip.callbacks = {
+      label: function (c) {
+        var l = nv[c.dataIndex];
+        return c.datasetIndex === 0
+          ? " Entrada: " + pct(l.pct_acessiveis) + " (" + l.vagas_acessiveis + " de " + l.total_acessiveis + ")"
+          : " Pleno ou acima: " + pct(l.pct_pleno_ou_acima) + " (" + l.vagas_pleno_ou_acima + " de " + l.total_pleno_ou_acima + ")";
+      },
+      afterBody: function (itens) {
+        var l = nv[itens[0].dataIndex];
+        return "Diferença: " + dec.format(l.diferenca_pp) + " p.p. (margem ±" + dec.format(l.margem_95_pp) + ")";
+      }
+    };
+    barras("graf-nivel", nv.map(function (l) { return l.skill; }), [
+      { nome: "Estágio, júnior ou sem nível", valores: nv.map(function (l) { return l.pct_acessiveis; }), cor: "--serie-1" },
+      { nome: "Pleno, sênior ou liderança", valores: nv.map(function (l) { return l.pct_pleno_ou_acima; }), cor: "--serie-2" }
+    ], { config: cfg2, espessura: 10, categoria: 0.78, barra: 0.92 });
+
+    // 3. Ferramentas de BI
+    var bi = dados.ferramentas_bi;
+    var cfg3 = base(true);
+    cfg3.scales.x.ticks.callback = function (v) { return v + "%"; };
+    cfg3.plugins.rotuloNaPonta = { ligado: true, sufixo: "%" };
+    cfg3.plugins.tooltip.callbacks = { label: function (c) { var l = bi[c.dataIndex]; return " " + pct(l.pct) + " das vagas de dados (" + l.vagas + ")"; } };
+    barras("graf-bi", bi.map(function (l) { return l.skill; }), [{ nome: "Vagas de dados", valores: bi.map(function (l) { return l.pct; }), cor: "--serie-1" }], { config: cfg3 });
+
+    // 4. Modalidade (100% empilhado)
+    var md = dados.modalidade;
+    var recortes = [["dados", "Dados"], ["dados_e_ti", "Dados e TI"], ["todas", "Todas as vagas"]];
+    var tipos = [["remoto", "Remoto", "--serie-1"], ["hibrido", "Híbrido", "--serie-2"], ["presencial", "Presencial", "--serie-3"], ["nao_informada", "Não informada", "--neutro"]];
+    function valorMod(r, t) {
+      var l = md.filter(function (x) { return x.recorte === r && x.modalidade === t; })[0];
+      return l ? l.pct_do_recorte : 0;
+    }
+    var cfg4 = base(true);
+    cfg4.layout.padding.right = 8;
+    cfg4.scales.x.stacked = true;
+    cfg4.scales.y.stacked = true;
+    cfg4.scales.x.max = 100;
+    cfg4.scales.x.ticks.callback = function (v) { return v + "%"; };
+    cfg4.plugins.tooltip.callbacks = { label: function (c) { return " " + c.dataset.label + ": " + pct(c.raw); } };
+    barras("graf-modalidade", recortes.map(function (r) { return r[1]; }), tipos.map(function (t) {
+      return { nome: t[1], valores: recortes.map(function (r) { return valorMod(r[0], t[0]); }), cor: t[2] };
+    }), { config: cfg4, empilhado: true, espessura: 24 });
+
+    // 5. Empresas (empilhado por nível)
+    var em = dados.empresas_dados;
+    var cfg5 = base(true);
+    cfg5.layout.padding.right = 8;
+    cfg5.scales.x.stacked = true;
+    cfg5.scales.y.stacked = true;
+    cfg5.scales.x.ticks.precision = 0;
+    cfg5.plugins.tooltip.callbacks = { label: function (c) { return " " + c.dataset.label + ": " + c.raw; } };
+    barras("graf-empresas", em.map(function (l) { return l.empresa; }), [
+      { nome: "Estágio, júnior ou sem nível", valores: em.map(function (l) { return l.dados_acessiveis; }), cor: "--serie-1" },
+      { nome: "Pleno, sênior ou liderança", valores: em.map(function (l) { return l.vagas_dados - l.dados_acessiveis; }), cor: "--serie-2" }
+    ], { config: cfg5, empilhado: true });
+
+    // 6. Idade das vagas
+    var id = dados.idade_vagas_dados;
+    var cfg6 = base(false);
+    cfg6.scales.y.ticks.precision = 0;
+    cfg6.plugins.rotuloNaPonta = { ligado: true, sufixo: "" };
+    cfg6.plugins.tooltip.callbacks = { label: function (c) { var l = id[c.dataIndex]; return " " + l.vagas + " vagas (" + pct(l.pct) + ")"; } };
+    barras("graf-idade", id.map(function (l) { return l.faixa; }), [{ nome: "Vagas de dados", valores: id.map(function (l) { return l.vagas; }), cor: "--serie-1" }], { config: cfg6, espessura: 24 });
+
+    // 7. Evolução semanal (só com duas semanas ou mais)
+    var ev = dados.evolucao_semanal;
+    var el = document.getElementById("graf-evolucao");
+    if (ev.length < 2) {
+      el.closest("section").classList.add("sem-grafico");
+    } else {
+      var cfg7 = base(false);
+      cfg7.layout.padding.right = 24;
+      cfg7.scales.y.beginAtZero = true;
+      cfg7.scales.y.ticks.precision = 0;
+      cfg7.interaction = { mode: "index", intersect: false };
+      cfg7.plugins.tooltip.callbacks = { label: function (c) { var l = ev[c.dataIndex]; return " " + l.dados_vistas + " vistas, " + l.dados_novas + " novas, " + l.dados_encerradas + " encerradas"; } };
+      graficos.push(new Chart(el, {
+        type: "line",
+        data: {
+          labels: ev.map(function (l) { return l.semana.split("-").reverse().join("/"); }),
+          datasets: [{
+            label: "Vagas de dados vistas",
+            data: ev.map(function (l) { return l.dados_vistas; }),
+            borderColor: cor("--serie-1"),
+            backgroundColor: cor("--serie-1"),
+            borderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            pointBorderColor: cor("--superficie"),
+            pointBorderWidth: 2,
+            tension: 0
+          }]
+        },
+        options: cfg7
+      }));
+    }
+  }
+
+  desenhar();
+  if (window.matchMedia) {
+    var mq = window.matchMedia("(prefers-color-scheme: dark)");
+    if (mq.addEventListener) mq.addEventListener("change", desenhar);
+  }
+  // Tema forçado por quem incorpora a página (atributo data-theme no <html>).
+  if (window.MutationObserver) {
+    new MutationObserver(desenhar).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  }
+})();
+</script>
+</body>
+</html>

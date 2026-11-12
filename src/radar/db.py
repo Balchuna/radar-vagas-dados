@@ -104,6 +104,18 @@ def garantir_empresa(conn, fonte_id: int, slug: str, nome: str) -> int:
 
 
 def sincronizar_skills(conn, skills) -> dict[str, int]:
+    """Deixa a tabela skills igual ao dicionário atual.
+
+    Skill que saiu do dicionário (ou mudou de nome) é apagada junto com os vínculos.
+    Vagas ainda ativas ganham os vínculos novos na mesma coleta; vagas já encerradas
+    ficam sem ela, porque o texto da descrição não é guardado para reprocessar.
+    """
+    nomes = [s.nome for s in skills]
+    marcas = ",".join("?" * len(nomes))
+    conn.execute(
+        f"DELETE FROM vaga_skill WHERE skill_id IN (SELECT id FROM skills WHERE nome NOT IN ({marcas}))", nomes
+    )
+    conn.execute(f"DELETE FROM skills WHERE nome NOT IN ({marcas})", nomes)
     for s in skills:
         conn.execute(
             "INSERT INTO skills (nome, categoria) VALUES (?, ?) "

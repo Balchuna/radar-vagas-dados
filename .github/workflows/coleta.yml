@@ -1,0 +1,69 @@
+# Coleta semanal (fase 5). Só passa a rodar quando o repositório existir no GitHub.
+#
+# O banco (radar.db) NÃO vai para o repositório: ele passa de uma execução para a outra
+# como artefato (guardado por 90 dias). No repositório entram só os agregados:
+# docs/index.html e docs/dados/agregados.json. Se nada mudou, não há commit.
+name: coleta semanal
+
+on:
+  schedule:
+    - cron: "17 10 * * 1"   # segunda-feira, 10:17 UTC (07:17 em Brasília)
+  workflow_dispatch:
+
+permissions:
+  contents: write   # commitar os agregados
+  actions: read     # baixar o artefato da execução anterior
+
+concurrency:
+  group: coleta
+  cancel-in-progress: false
+
+jobs:
+  coletar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install -r requirements.txt
+
+      - name: Testes antes de coletar
+        run: python -m pytest -q
+
+      - name: Baixar o banco da última coleta que deu certo
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          id=$(gh run list --workflow coleta.yml --status success --limit 1 --json databaseId -q '.[0].databaseId')
+          if [ -n "$id" ] && gh run download "$id" -n radar-db -D .; then
+            echo "banco da execução $id restaurado"
+          else
+            echo "sem banco anterior: esta coleta começa do zero"
+          fi
+
+      - name: Coletar (1 requisição por segundo por host; 403/429 encerra a fonte)
+        run: python scripts/coletar.py --db radar.db
+
+      - name: Gerar página e agregados
+        run: python scripts/relatorio.py --db radar.db
+
+      - name: Guardar o banco para a próxima execução
+        uses: actions/upload-artifact@v4
+        with:
+          name: radar-db
+          path: radar.db
+          retention-days: 90
+
+      - name: Commitar os agregados, se mudaram
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/index.html docs/dados/agregados.json
+          if git diff --cached --quiet; then
+            echo "agregados iguais: nada a commitar"
+          else
+            git commit -m "Coleta de $(date -u +%d/%m/%Y)"
+            git push
+          fi

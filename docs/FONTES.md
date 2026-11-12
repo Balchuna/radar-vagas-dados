@@ -6,7 +6,7 @@ Regras que valem para todas as fontes usadas (em `src/radar/http.py`):
 
 - User-Agent `radar-vagas-dados/0.1 (projeto de portfolio; ...)`, sem nome nem e-mail de pessoa;
 - no máximo 1 requisição por segundo por host, com timeout de 30 s;
-- falha temporária (rede ou erro 5xx) é repetida até 4 vezes, com espera de 2, 4 e 8 s;
+- falha temporária (rede ou erro 5xx) é tentada até 4 vezes no total, com espera de 2, 4 e 8 s entre as tentativas;
 - resposta 403 ou 429 encerra a fonte naquela execução, sem tentar contornar;
 - uma requisição por empresa por execução (cerca de 31 por semana no total);
 - o texto completo das descrições **não é guardado**: só metadados, as skills extraídas, um hash (SHA-256) do texto e o link da vaga.

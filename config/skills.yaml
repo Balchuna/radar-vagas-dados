@@ -6,7 +6,7 @@
 #   regex:      (opcional) expressões regulares próprias, para termos ambíguos.
 #   maiusculas: (opcional) true = a busca diferencia maiúsculas (para "R" e "Go").
 # Alterou o dicionário? Suba a versão e rode os testes (tests/test_skills.py).
-versao: 1
+versao: 2
 
 skills:
   # Linguagens e consulta
@@ -37,7 +37,7 @@ skills:
   - {nome: Kotlin, categoria: linguagem, sinonimos: [Kotlin]}
   - {nome: Ruby, categoria: linguagem, sinonimos: [Ruby, Ruby on Rails]}
   - {nome: PHP, categoria: linguagem, sinonimos: [PHP, Laravel]}
-  - {nome: VBA, categoria: linguagem, sinonimos: [VBA, Macros, Macro]}
+  - {nome: VBA, categoria: linguagem, sinonimos: [VBA, Excel VBA, Macros VBA, Macro VBA, Macros do Excel, Excel macros]}
   - {nome: DAX, categoria: linguagem, sinonimos: [DAX]}
   - {nome: M (Power Query), categoria: linguagem, sinonimos: [Power Query, PowerQuery, Linguagem M]}
 
@@ -47,7 +47,7 @@ skills:
   - {nome: Looker, categoria: bi, sinonimos: [Looker, LookML, Looker Studio, Data Studio, Google Data Studio]}
   - {nome: Qlik, categoria: bi, sinonimos: [Qlik, QlikView, Qlik Sense]}
   - {nome: Metabase, categoria: bi, sinonimos: [Metabase]}
-  - {nome: Excel, categoria: bi, sinonimos: [Excel, Planilhas, Spreadsheets, Google Sheets, Planilha]}
+  - {nome: Excel/planilhas, categoria: bi, sinonimos: [Excel, Planilhas, Spreadsheets, Google Sheets, Planilha]}
 
   # Bancos de dados e armazéns
   - {nome: PostgreSQL, categoria: banco, sinonimos: [PostgreSQL, Postgres]}
@@ -67,18 +67,18 @@ skills:
   - {nome: Airflow, categoria: engenharia_dados, sinonimos: [Airflow, Apache Airflow]}
   - {nome: dbt, categoria: engenharia_dados, sinonimos: [dbt, data build tool]}
   - {nome: Kafka, categoria: engenharia_dados, sinonimos: [Kafka, Apache Kafka]}
-  - {nome: ETL/ELT, categoria: engenharia_dados, sinonimos: [ETL, ELT, Pipelines de dados, Data pipelines, Data pipeline, Pipeline de dados]}
-  - {nome: Data Warehouse, categoria: engenharia_dados, sinonimos: [Data Warehouse, DataWarehouse, DW, Data Lake, Datalake, Lakehouse]}
+  - {nome: ETL/pipelines de dados, categoria: engenharia_dados, sinonimos: [ETL, ELT, Pipelines de dados, Data pipelines, Data pipeline, Pipeline de dados]}
+  - {nome: Data Warehouse/Lake, categoria: engenharia_dados, sinonimos: [Data Warehouse, DataWarehouse, DW, Data Lake, Datalake, Lakehouse]}
   - {nome: Modelagem de dados, categoria: engenharia_dados, sinonimos: [Modelagem de dados, Data modeling, Data modelling, Modelagem dimensional, Dimensional modeling, Star schema, Esquema estrela]}
 
   # Nuvem e infraestrutura
   - {nome: AWS, categoria: nuvem, sinonimos: [AWS, Amazon Web Services, S3, Lambda, EC2, Glue, Athena]}
   - {nome: Azure, categoria: nuvem, sinonimos: [Azure, Microsoft Azure, Azure Data Factory, Synapse]}
   - {nome: GCP, categoria: nuvem, sinonimos: [GCP, Google Cloud, Google Cloud Platform]}
-  - {nome: Docker, categoria: infra, sinonimos: [Docker, Containers, Contêineres, Container]}
+  - {nome: Docker/contêineres, categoria: infra, sinonimos: [Docker, Containers, Contêineres, Container]}
   - {nome: Kubernetes, categoria: infra, sinonimos: [Kubernetes, K8s, EKS, GKE, AKS]}
-  - {nome: Terraform, categoria: infra, sinonimos: [Terraform, IaC, Infrastructure as Code]}
-  - {nome: Linux, categoria: infra, sinonimos: [Linux, Unix, Bash, Shell script, Shell scripting]}
+  - {nome: Terraform/IaC, categoria: infra, sinonimos: [Terraform, IaC, Infrastructure as Code, Infraestrutura como código]}
+  - {nome: Linux/shell, categoria: infra, sinonimos: [Linux, Unix, Bash, Shell script, Shell scripting]}
   - {nome: Git, categoria: infra, sinonimos: [Git, GitHub, GitLab, Bitbucket, Versionamento de código, Version control]}
   - {nome: CI/CD, categoria: infra, sinonimos: [CI/CD, CICD, Continuous Integration, Integração contínua, GitHub Actions, Jenkins]}
 
@@ -92,15 +92,15 @@ skills:
   - {nome: RPA, categoria: automacao, sinonimos: [RPA, UiPath, Automation Anywhere, Blue Prism, Automação robótica de processos]}
 
   # Análise, estatística e IA
-  - {nome: Estatística, categoria: analise, sinonimos: [Estatística, Statistics, Statistical, Estatístico, Estatísticos, Inferência, Testes de hipótese, Hypothesis testing]}
-  - {nome: Testes A/B, categoria: analise, sinonimos: [A/B test, A/B tests, A/B testing, Testes A/B, Teste A/B, Experimentação, Experimentation]}
+  - {nome: Estatística, categoria: analise, sinonimos: [Estatística, Statistics, Statistical, Estatístico, Estatísticos, Inferência estatística, Inferência causal, Causal inference, Testes de hipótese, Hypothesis testing]}
+  - {nome: Testes A/B, categoria: analise, sinonimos: [A/B test, A/B tests, A/B testing, Testes A/B, Teste A/B, Experimentation design, Experiment design, Design of experiments, Controlled experiments, Desenho de experimentos, Experimentos controlados, Multivariate testing]}
   - {nome: Machine Learning, categoria: ia, sinonimos: [Machine Learning, Aprendizado de máquina, ML, Scikit-learn, sklearn, XGBoost]}
   - {nome: IA generativa / LLM, categoria: ia, sinonimos: [LLM, LLMs, IA generativa, Generative AI, GenAI, GPT, ChatGPT, OpenAI, RAG, Prompt engineering, Engenharia de prompt, LangChain]}
-  - {nome: Google Analytics, categoria: analise, sinonimos: [Google Analytics, GA4, Google Tag Manager, GTM]}
+  - {nome: Google Analytics, categoria: analise, sinonimos: [Google Analytics, GA4, Google Tag Manager]}
 
   # Gestão e ferramentas de trabalho
-  - {nome: Scrum/Ágil, categoria: gestao, sinonimos: [Scrum, Agile, Ágil, Ágeis, Kanban, Metodologias ágeis]}
-  - {nome: Jira, categoria: gestao, sinonimos: [Jira, Confluence]}
+  - {nome: Scrum/Ágil, categoria: gestao, sinonimos: [Scrum, Kanban, Metodologia ágil, Metodologias ágeis, Métodos ágeis, Práticas ágeis, Ambiente ágil, Ambientes ágeis, Times ágeis, Squads ágeis, Agile methodology, Agile methodologies, Agile development, Agile environment, Agile environments, Agile teams, Agile practices, Agile delivery]}
+  - {nome: Jira/Confluence, categoria: gestao, sinonimos: [Jira, Confluence]}
   - {nome: SAP, categoria: gestao, sinonimos: [SAP, SAP S/4HANA, S/4HANA]}
   - {nome: Salesforce, categoria: gestao, sinonimos: [Salesforce, SFDC]}
   - {nome: Inglês, categoria: idioma, sinonimos: [Inglês avançado, Inglês fluente, Inglês intermediário, Inglês técnico, Fluent English, Advanced English, English fluency, Conhecimento em inglês, Domínio do inglês, Inglês]}

@@ -117,4 +117,4 @@ O banco `radar.db` não vai para o repositório: tem os títulos e links de toda
 
 ## Licença
 
-A definir antes da publicação.
+Código sob a licença [MIT](LICENSE). As vagas pertencem às empresas que as publicaram: o repositório guarda só números agregados, e o banco com títulos e links fica fora dele.

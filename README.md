@@ -77,7 +77,7 @@ RESULTADO: idêntico. A segunda execução não criou nem alterou nada.
 
 ![Vagas de entrada comparadas com as de pleno para cima](docs/img/nivel.png)
 
-A página completa, com gráficos e tabelas, é [docs/index.html](docs/index.html). Ela mostra a data da coleta no topo e funciona sem JavaScript: as tabelas vêm prontas do Python.
+A página completa, com gráficos e tabelas, está em **https://balchuna.github.io/radar-vagas-dados/** (o arquivo é [docs/index.html](docs/index.html)). Ela mostra a coleta semanal mais recente, não a de 12/11. Ela mostra a data da coleta no topo e funciona sem JavaScript: as tabelas vêm prontas do Python.
 
 ## Como reproduzir
 

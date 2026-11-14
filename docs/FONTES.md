@@ -19,21 +19,21 @@ Regras que valem para todas as fontes usadas (em `src/radar/http.py`):
 | Lever | `api.lever.co/v0/postings/{empresa}?mode=json` | `Allow: /`, `Crawl-delay: 1` | API pública; o README diz que as vagas publicadas podem ser coletadas por terceiros | **Usada** |
 | Ashby | `api.ashbyhq.com/posting-api/job-board/{empresa}` | `api.ashbyhq.com/robots.txt` responde 401 (não há arquivo público) | API pública, sem chave; nada proíbe | **Usada** |
 | Gupy | `portal.gupy.io/api/job-search/jobs` (não documentado) | Libera tudo | Os termos proíbem "agregar, copiar ou duplicar" partes da plataforma | **Descartada** |
-| LinkedIn | — | — | Os termos proíbem coleta automatizada | **Fora** (decisão do spec) |
+| LinkedIn | não usado | não consultado | Os termos proíbem coleta automatizada | **Fora**, decidido antes da coleta |
 
 ## Greenhouse
 
 - Documentação: https://developers.greenhouse.io/job-board.html (redireciona para https://docs.greenhouse.io/job-board.html).
 - Diz que os dados do Job Board são públicos e que os endpoints GET não exigem autenticação. Não documenta limite de requisições. Não encontrei cláusula contra coleta automatizada.
 - Termos do site: https://www.greenhouse.com/legal (contratos voltados a clientes; não há termos específicos para a API pública).
-- robots.txt: https://boards-api.greenhouse.io/robots.txt — `User-agent: *` / `Disallow: /embed/`. O projeto usa `/v1/boards/...`, que está liberado.
+- robots.txt (https://boards-api.greenhouse.io/robots.txt): `User-agent: *` / `Disallow: /embed/`. O projeto usa `/v1/boards/...`, que está liberado.
 
 ## Lever
 
 - Documentação: https://github.com/lever/postings-api
 - O README diz que a API serve para montar sites de vagas e que as vagas publicadas são públicas e "podem ser coletadas por terceiros". O único limite citado é para envio de candidaturas (POST), que o projeto não usa.
 - Termos: https://www.lever.co/terms-of-service (atualizados em 25/08/2023). As restrições ali valem para clientes da Lever, não para a leitura de vagas públicas.
-- robots.txt: https://api.lever.co/robots.txt — `User-agent: *` / `Allow: /` / `Crawl-delay: 1`. O intervalo de 1 s do projeto respeita o `Crawl-delay`.
+- robots.txt (https://api.lever.co/robots.txt): `User-agent: *` / `Allow: /` / `Crawl-delay: 1`. O intervalo de 1 s do projeto respeita o `Crawl-delay`.
 - O robots.txt de `jobs.lever.co` traz sinais de conteúdo `search=yes, ai-train=no, use=reference`. O projeto não usa esse host para coletar e não treina modelo de IA com as vagas.
 
 ## Ashby

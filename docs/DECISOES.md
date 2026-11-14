@@ -45,7 +45,7 @@ Todas tomadas em 12/11/2026, na ordem em que apareceram.
 
 15. **Banco aberto só para leitura nas análises.** As visões auxiliares são temporárias (`CREATE TEMP VIEW`) e somem ao fechar a conexão. Um teste confirma que o arquivo do banco não muda depois das análises.
 
-16. **Pergunta ampliada, com o recorte "entrada ou sem nível".** Na primeira coleta, só 2 das 97 vagas de dados diziam estágio ou júnior no título; na coleta final de 12/11/2026, só 1 das 95 (`python scripts/relatorio.py`). Uma análise só de vagas júnior não teria amostra. Por escolha do autor, o projeto analisa as vagas de dados de todos os níveis e compara o grupo "estágio, júnior ou sem nível no título" com "pleno para cima". A limitação está declarada: "sem nível" não garante que a vaga aceite iniciantes.
+16. **Pergunta ampliada, com o recorte "entrada ou sem nível".** Na primeira coleta, só 2 das 97 vagas de dados diziam estágio ou júnior no título; na coleta final de 12/11/2026, só 1 das 95 (`python scripts/relatorio.py`). Uma análise só de vagas júnior não teria amostra. Por isso, decidi analisar as vagas de dados de todos os níveis e comparar o grupo "estágio, júnior ou sem nível no título" com "pleno para cima". A limitação está declarada: "sem nível" não garante que a vaga aceite iniciantes.
 
 17. **Margem de erro de 95% nas comparações entre níveis.** A diferença entre duas proporções tem margem aproximada de `1,96 × raiz(p1(1−p1)/n1 + p2(1−p2)/n2)`. Com grupos de 34 e 61 vagas, a margem passa de 15 pontos percentuais na maioria das skills. Só a diferença maior que a margem vira frase na página. Não é um teste formal: serve para não vender ruído como achado.
 

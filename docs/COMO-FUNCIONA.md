@@ -10,16 +10,16 @@ O projeto pergunta a esses endereços, uma vez por semana, quais vagas estão ab
 
 ## O caminho de uma vaga
 
-1. **Pergunta educada.** O programa chama o endereço de cada empresa, uma de cada vez, com no máximo uma chamada por segundo em cada site. Ele se identifica como "radar-vagas-dados (projeto de portfólio)". Se o site responder "proibido" (403) ou "devagar" (429), o programa para de chamar aquele site até a próxima semana. Antes de usar cada site, li os termos de uso e o `robots.txt` dele ([FONTES.md](FONTES.md)).
-2. **Só Brasil e América Latina.** Vagas com local nos Estados Unidos ou na Europa são descartadas. Vagas "banco de talentos" (sem vaga real por trás) também.
-3. **Leitura do título.** Pelo título, o programa decide a área (dados, TI ou outra) e o nível (estágio, júnior, pleno, sênior, liderança ou não informado). "Analista de Dados Júnior" vira dados e júnior. "Data Engineer" vira dados, nível não informado.
-4. **Leitura da descrição.** A descrição é lida só na memória, para achar as skills e a modalidade (remoto, híbrido ou presencial). Depois é descartada: o banco guarda só um "resumo digital" (hash) do texto, que serve para saber se a descrição mudou, sem guardar o texto.
-5. **Skills por dicionário.** Um arquivo ([config/skills.yaml](../config/skills.yaml)) lista 65 skills e os jeitos de escrever cada uma: "Power BI", "PowerBI"; "Excel", "planilhas". O programa procura esses termos no título e na descrição. Ele exige que o termo esteja isolado: "SQL" não conta dentro de "MySQLi".
-6. **Banco de dados.** Cada vaga vira uma linha no banco (SQLite, um arquivo só). A vaga é identificada pela fonte e pelo número que a fonte dá a ela.
+1. O programa chama o endereço de cada empresa, uma de cada vez, com no máximo uma chamada por segundo em cada site. Ele se identifica como "radar-vagas-dados (projeto de portfólio)". Se o site responder "proibido" (403) ou "devagar" (429), o programa para de chamar aquele site até a próxima semana. Antes de usar cada site, li os termos de uso e o `robots.txt` dele ([FONTES.md](FONTES.md)).
+2. Ele descarta as vagas com local nos Estados Unidos ou na Europa e as de "banco de talentos", que não têm vaga real por trás. Ficam só as do Brasil e da América Latina.
+3. Pelo título, o programa decide a área (dados, TI ou outra) e o nível (estágio, júnior, pleno, sênior, liderança ou não informado). "Analista de Dados Júnior" vira dados e júnior. "Data Engineer" vira dados, nível não informado.
+4. A descrição é lida só na memória, para achar as skills e a modalidade (remoto, híbrido ou presencial). Depois é descartada: o banco guarda só um "resumo digital" (hash) do texto, que serve para saber se a descrição mudou, sem guardar o texto.
+5. Um arquivo ([config/skills.yaml](../config/skills.yaml)) lista 65 skills e os jeitos de escrever cada uma: "Power BI", "PowerBI"; "Excel", "planilhas". O programa procura esses termos no título e na descrição. Ele exige que o termo esteja isolado: "SQL" não conta dentro de "MySQLi".
+6. Cada vaga vira uma linha no banco (SQLite, um arquivo só). A vaga é identificada pela fonte e pelo número que a fonte dá a ela.
 
 ## Rodar duas vezes não duplica nada
 
-Quando a mesma vaga aparece de novo, o programa **atualiza** a linha existente em vez de criar outra. Ele anota a data em que viu a vaga pela última vez. Se uma vaga que estava aberta não aparece mais, ela é marcada como encerrada (não é apagada). Se voltar, é reaberta.
+Quando a mesma vaga aparece de novo, o programa atualiza a linha existente em vez de criar outra. Ele anota a data em que viu a vaga pela última vez. Se uma vaga que estava aberta não aparece mais, ela é marcada como encerrada (não é apagada). Se voltar, é reaberta.
 
 Isso tem nome técnico (UPSERT idempotente), mas a ideia é simples: rodar a coleta duas vezes seguidas deixa o banco igual. O comando `python scripts/conferir_idempotencia.py` faz duas coletas reais seguidas e compara o banco depois de cada uma.
 
@@ -27,20 +27,20 @@ Isso tem nome técnico (UPSERT idempotente), mas a ideia é simples: rodar a col
 
 Todas as contas estão num arquivo só, [sql/analises.sql](../sql/analises.sql). Cada pergunta é uma consulta com nome: "skills mais pedidas", "modalidade", "Power BI x Looker x Tableau" e assim por diante. O comando `python scripts/relatorio.py`:
 
-- abre o banco **só para leitura** (as contas não podem alterar os dados);
+- abre o banco só para leitura (as contas não podem alterar os dados);
 - roda cada consulta;
 - calcula a margem de erro das comparações entre níveis;
 - grava a página [docs/index.html](index.html) e os números em [docs/dados/agregados.json](dados/agregados.json);
 - imprime tudo no terminal.
 
-Os números do README e do currículo saem desse comando.
+Os números do README saem desse comando.
 
 ## O recorte "vagas de entrada"
 
 Quase nenhuma vaga dessas empresas diz "júnior" no título. Por isso o projeto compara dois grupos:
 
-- **entrada ou sem nível:** estágio, júnior ou título sem nível. São as que, em tese, aceitam quem está começando;
-- **pleno para cima:** pleno, sênior ou liderança.
+- entrada ou sem nível: estágio, júnior ou título sem nível. São as que, em tese, aceitam quem está começando;
+- pleno para cima: pleno, sênior ou liderança.
 
 "Sem nível no título" não quer dizer "aceita júnior". Muitas dessas vagas pedem anos de experiência na descrição. É uma aproximação, e o README diz isso.
 

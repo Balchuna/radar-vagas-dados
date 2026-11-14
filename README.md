@@ -38,7 +38,7 @@ A explicação sem jargão está em [docs/COMO-FUNCIONA.md](docs/COMO-FUNCIONA.m
 
 ## Resultados
 
-Coleta de **12/11/2026** (última execução às 19:31 UTC). Salvo indicação, cada número sai de `python scripts/relatorio.py --db radar.db`, e o nome entre parênteses é a consulta de [sql/analises.sql](sql/analises.sql). Os mesmos números estão em [docs/dados/agregados.json](docs/dados/agregados.json).
+Coleta de **12/11/2026** (última execução às 19:31 UTC). Salvo indicação, cada número sai de `python scripts/relatorio.py --db radar.db`, e o nome entre parênteses é a consulta de [sql/analises.sql](sql/analises.sql). Estes números são um retrato fixo daquela coleta, feita no computador do autor. A página [docs/index.html](docs/index.html) e o [docs/dados/agregados.json](docs/dados/agregados.json) são refeitos toda semana pelo GitHub Actions, numa série própria que começou em 14/11/2026, então os números deles mudam a cada coleta.
 
 - **Volume.** As 31 empresas responderam. Ficaram **1.505 vagas abertas** no Brasil e na América Latina, em 30 empresas: **95 de dados**, 341 de TI e 1.069 de outras áreas (`panorama`, `area_por_nivel`). Por fonte: Greenhouse 1.350, Lever 145 e Ashby 10 (`python scripts/resumo.py`).
 - **Skills mais pedidas nas vagas de dados:** Python em **78,9%** (75 vagas), SQL em **76,8%** (73), ETL/pipelines de dados em 46,3%, AWS em 34,7% e Airflow em 32,6% (`top_skills_dados`). Python e SQL aparecem juntos em 63 vagas, 66,3% (`pares_skills_dados`).

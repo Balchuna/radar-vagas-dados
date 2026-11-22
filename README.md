@@ -6,7 +6,7 @@ Toda semana, este projeto coleta as vagas de dados e TI de 31 empresas pelas API
 
 ## English summary
 
-Portfolio project: which skills do data job postings in Brazil ask for, and what changes in postings open to beginners? A Python collector reads the public job-board APIs of Greenhouse, Lever and Ashby for 31 companies (Terms of Service and `robots.txt` checked for each source), keeps only Brazil and Latin America postings, and stores metadata, extracted skills, a hash of the description and the link in SQLite. Full descriptions are never stored. The upsert is idempotent (two consecutive real runs leave the database identical), all analyses live in one SQL file, and a static page with Chart.js is regenerated weekly by GitHub Actions. Python, requests, SQLite, SQL, Chart.js, pytest.
+Portfolio project: which skills do data job postings in Brazil ask for, and what changes in postings open to beginners? A Python collector reads the public job-board APIs of Greenhouse, Lever and Ashby for 31 companies (Terms of Service and `robots.txt` checked for each source), keeps only Brazil and Latin America postings, and stores metadata, extracted skills, a hash of the description and the link in SQLite. Full descriptions are never stored. The upsert is idempotent (two consecutive real runs leave the database identical), all analyses live in one SQL file, and a static page with Chart.js is regenerated weekly by GitHub Actions (latest automated run on 16/11/2026: 1,478 active Brazil/LatAm roles, 91 in data — Python 78.0%, SQL 76.9%). Live dashboard: https://balchuna.github.io/radar-vagas-dados/ · Stack: Python, requests, SQLite, SQL, Chart.js, pytest (101 tests, CI passing).
 
 ## A pergunta
 
@@ -46,7 +46,7 @@ A explicação sem jargão está em [docs/COMO-FUNCIONA.md](docs/COMO-FUNCIONA.m
 
 ## Resultados
 
-Os números abaixo são da coleta de 12/11/2026 (última execução às 19:31 UTC), feita no meu computador. Salvo indicação, cada um sai de `python scripts/relatorio.py --db radar.db`, e o nome entre parênteses é a consulta de [sql/analises.sql](sql/analises.sql). A página [docs/index.html](docs/index.html) e o [docs/dados/agregados.json](docs/dados/agregados.json) são refeitos toda semana pelo GitHub Actions, numa série própria que começou em 14/11/2026, então os números deles mudam a cada coleta.
+Os números abaixo são da coleta de referência de 12/11/2026 (última execução às 19:31 UTC), feita no meu computador. Salvo indicação, cada um sai de `python scripts/relatorio.py --db radar.db`, e o nome entre parênteses é a consulta de [sql/analises.sql](sql/analises.sql). A página [docs/index.html](docs/index.html) e o [docs/dados/agregados.json](docs/dados/agregados.json) são refeitos toda semana pelo GitHub Actions, numa série própria que começou em 14/11/2026 — na coleta agendada de **16/11/2026**, foram **1.478 vagas ativas** no Brasil/LatAm e **91 de dados** (Python 78,0% e SQL 76,9%), atualizadas automaticamente em https://balchuna.github.io/radar-vagas-dados/.
 
 - As 31 empresas responderam. Ficaram 1.505 vagas abertas no Brasil e na América Latina, em 30 empresas: 95 de dados, 341 de TI e 1.069 de outras áreas (`panorama`, `area_por_nivel`). Por fonte, foram 1.350 no Greenhouse, 145 na Lever e 10 na Ashby (`python scripts/resumo.py`).
 - Nas vagas de dados, as skills mais pedidas são Python, em 78,9% (75 vagas), SQL, em 76,8% (73), ETL/pipelines de dados, em 46,3%, AWS, em 34,7%, e Airflow, em 32,6% (`top_skills_dados`). Python e SQL aparecem juntos em 63 vagas, 66,3% (`pares_skills_dados`).
